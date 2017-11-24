@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"  ng-app="app" >
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Yii demo</title>
+  <link rel="stylesheet" href="../css/bootstrap.css">
+  <script src="../js/angular.js" charset="utf-8"></script>
+  <script src="../js/app.js" charset="utf-8"></script>
+
+</head>
+
+<body ng-controller="PController">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="post.html">POST</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container" style="margin-top: 15px">
+    <div class="row">
+      <h1 class="display-4">Try to post something</h1>
+    </div>
+    <form class="form" action="" method="post">
+      <div class="row">
+        <label for="productid">Product ID</label>
+        <input type="number" name="productid" value="" class="form-control" ng-model="product.id" require="required">
+      </div>
+      <div class="row">
+        <label for="productname">Product Name</label>
+        <input type="text" name="productname" value="" class="form-control" ng-model="product.name">
+      </div>
+      <div class="row">
+        <label for="productprice">Product Price</label>
+        <input type="number" name="productprice" value="" class="form-control" ng-model="product.price">
+      </div>
+      <div class="row">
+        <label for="productprice">Product Description</label>
+        <textarea name="name" rows="8" cols="80" class="form-control" ng-model="product.description"></textarea>
+      </div>
+      <div class="row">
+        <label for="productimg">Product Image</label>
+        <input type="file" name="" value="" class="form-control" accept="image/*">
+      </div>
+      <div class="row">
+        <label for="product_avaiable_time">Product Available Time</label>
+      </div>
+      <div class="row">
+        <div class="col-md-5">
+          <div class="row">
+            <label>Start time</label>
+          </div>
+          <div class="row input-group">
+            <input type="datetime" name="" value="" class="form-control">
+            <span class="input-group-btn">
+              <button type="button" name="button" class="btn btn-info">
+                <span class="glyphicon glyphicon-calendar">Calendar</span>
+            </button>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-0">
+
+        </div>
+        <div class="col-md-5">
+          <div class="row">
+            <label>Stop time</label>
+          </div>
+          <div class="row input-group">
+            <input type="datetime" name="" value="" class="form-control">
+            <span class="input-group-btn">
+              <button type="button" name="button" class="btn btn-info">
+                <span class="glyphicon glyphicon-calendar">Calendar</span>
+            </button>
+            </span>
+          </div>
+        </div>
+        <br/>
+      </div>
+      <br/>
+      <div class="justify-content-between">
+        <a  style="color:white " class="col-md-2 float-right btn btn-primary" ng-click="postProduct(product)">Post</a>
+        <div class="col-md-1 float-right"></div>
+        <button class="col-md-2 btn btn-secondary float-right" type="reset" name="button">Reset input</button>
+        <br/><br/>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal fade" id="preview" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="">Preview product</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+          {{result}}
+          <!-- <p><b>ID: </b>{{productd.id}}</p>
+          <p><b>Product name: </b>{{product.name}}</p>
+          <p><b>Product Price: </b>{{product.price}}</p>
+          <p><b>Description: </b><br/>{{product.despription}}</p> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Publish</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/jquery.js" charset="utf-8"></script>
+  <script src="js/bootstrap.bundle.js" charset="utf-8"></script>
+  <script src="js/bootstrap.js" charset="utf-8"></script>
+</body>
+
+</html>
