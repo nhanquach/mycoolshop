@@ -1,0 +1,81 @@
+<div class="container" data-ng-init="checkPermission()">
+  <h1 class="display-4">Add new product</h1>
+  <div class="row">
+    <div class="col">
+      <label for="" class="">Product name: {{product.name}}</label>
+      <input type="text" name="" value="" ng-model="product.name" class="form-control">
+    </div>
+
+    <div class="col">
+      <label for="">Product image</label>
+      <div class="" ng-controller="UploadCtrl as $ctrl">
+        <div>
+          <file-upload on-change="$ctrl.onChange">
+            Upload an image
+          </file-upload>
+        </div>
+        <div class="progress" ng-if="bar">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" ng-style="{'width': percentUploaded + '%'}"></div>
+        </div>
+        <div class="imagePreview" ng-if="thumbnail">
+          <img ng-src="{{downloadURL}}" alt="thumbnail" class="img-thumbnail rounded mx-auto d-block" style="max-width: 250px; max-height: 300px">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="">
+    <label for="" class="">Product price: {{product.price | currency}}</label>
+    <input type="number" name="" value="" ng-model="product.price" class="form-control">
+  </div>
+  <div class="">
+    <label for="" class="">Product description</label>
+    <textarea type="text" name="" value="" rows="10" ng-model="product.description" class="form-control"></textarea>
+  </div>
+  <div class="">
+    <label for="category" class="">Category</label>
+    <select multiple class="form-control category" ng-model="product.category">
+      <option ng-repeat="a in a_category" value="{{a.id}}">{{a.name}}</option>
+    </select>
+    <small>Hold "ctrl" to select multiple categories.</small>
+  </div>
+  <div class="">
+    <label for="sub" class="">Subcategory</label>
+    <select multiple name="subcategory" class="form-control subcategory" ng-model="product.subcategory">
+      <option ng-repeat="a in a_subcategory" value="{{a.id}}">{{a.name}}</option>
+    </select>
+    <small>Hold "ctrl" to select multiple subcategories.</small>
+  </div>
+  <br/>
+  <!-- 
+  From Dec 1, 2017 myself
+  To my future self:
+  This is the intention of doing the time-based rules display products. 
+  -->
+  <!-- <div class="">
+    <label for="">Available time</label>
+    <div class="Datechooser">
+      <div class="row">
+        <p class="col">From <input type="date" ng-model="date.startDate"></p>
+        <p class="col">To <input type="date" ng-model="date.endDate" ng-change="getDate(date)"></p>
+      </div>
+      <div class="row">
+        <select multiple class="col-md-4 form-control" ng-model="ss">
+          <option ng-repeat="day in t" value="{{day}}">
+            {{day}}
+          </option>
+        </select>
+        <input type="time" class="col-md-3 form-control">
+      </div>
+      <button class="btn btn-outline-primary form-control" ng-click="getDate(date)">Get day(s)</button>
+    </div>
+  </div> -->
+
+  <div>
+    <p class="lead">Status: {{status}}</p>
+  </div>
+  <div class="float-right">
+    <br/>
+    <button type="button" name="button" class="btn btn-primary" ng-click="post_product(product);">Post product</button>
+  </div>
+  <br/>
+</div>

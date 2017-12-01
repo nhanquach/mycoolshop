@@ -1,0 +1,22 @@
+<div class="container">
+    <h1 class="display-4">Please login to continue</h1>
+    <form class="form">
+      <div class="">
+        <label for="">Email</label>
+        <input ng-model="u.email" type="email" name="" value="" required class="form-control">
+      </div>
+      <div class="">
+        <label for="">Password</label>
+        <input ng-model="u.password" type="password" name="" value="" required class="form-control">
+      </div>
+      <div class="">
+        <br/>
+        <div class="">
+          <div class="alert alert-warning" role="alert" ng-show="alert.show">
+            {{alert.message}}
+          </div>
+        </div>
+        <button type="submit" name="button" class="btn btn-primary float-right" ng-click="login(u)">Submit</button>
+      </div>
+    </form>
+</div>

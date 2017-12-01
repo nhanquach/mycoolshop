@@ -1,0 +1,61 @@
+<div class="container" data-ng-init="checkPermission()">
+  <h1 class="display-4">Add new category</h1>
+  <form>
+    <div class="">
+      <label for="" class="">Category id</label>
+      <input type="text" name="" value="" class="form-control" ng-model="category.id">
+    </div>
+    
+    <div class="">
+      <label for="" class="">Category name</label>
+      <input type="text" name="" value="" ng-model="category.name" class="form-control">
+    </div>
+    
+    <div class="">
+      <br/>
+      <button type="button" name="button" class="btn btn-primary" ng-click="post_category(category);">Save</button>
+    </div>
+    <div>
+      <br/>
+      <p style="padding: 5px;" class="lead {{type}}" href="">Status: {{message}}</p>
+    </div>
+  </form>
+
+</div>
+<div class="container">
+  <br/>
+  <div class="row">
+    <h3 class="col float-left" style="display: block">Available categories</h3>
+    <p>
+      <a href="" class="col float-right" ng-click="getAvailableCategory()">
+        <i class="material-icons">refresh</i>Refresh</a>
+    </p>
+  </div>
+  <div class="available_categories row">
+    <div class=" col">
+      <table class="table table-bordered" style="text-align:center">
+        <thead class="thead-light sticky-top">
+          <th>#</th>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Actions</th>
+        </thead>
+        <tbody>
+          <tr ng-repeat="a in a_category track by $index">
+            <td>{{$index+1}}</td>
+            <td>{{a.id}}</td>
+            <td>{{a.name}}</td>
+            <td>
+              <a href="" class="btn btn-secondary">
+                <i class="material-icons">edit</i>
+              </a>
+              <a href="" class="btn btn-danger">
+                <i class="material-icons">delete</i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

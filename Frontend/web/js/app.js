@@ -1,25 +1,23 @@
-// const product_url = "http://localhost/shop/myshop/web/index.php?r=allproducts";
-// const product_post_url = "http://localhost/shop/myshop/web/index.php?r=allproducts/create";
-// const extra_url = "http://localhost/shop/myshop/web/index.php?r=productextra%2Fgetproductextra";
-// const category_url = "http://localhost/shop/myshop/web/index.php?r=category";
-// const subcategory_url = "http://localhost/shop/myshop/web/index.php?r=subcategory";
+/*
+Use localhost to development, because 000webhostapp limit the node.
+*/
+const localhost = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
+const product_url =localhost + "allproducts";
+const product_post_url = localhost + "allproducts/create";
+const extra_url =localhost + "productextra%2Fgetproductextra";
+const category_url = localhost + "category";
+const subcategory_url = localhost + "subcategory";
 
-const product_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts";
-const product_post_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts/create";
-const extra_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=productextra";
-const category_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=category";
-const subcategory_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=subcategory";
+//const product_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts";
+//const product_post_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts/create";
+//const extra_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=productextra";
+//const category_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=category";
+//const subcategory_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=subcategory";
 
-var app = angular.module('app', []);
 
-app.controller('ApiController', ['$scope', '$http',  function ($scope, $http) {
-  // $http.get(p)
-  //     .then(function (response) {
-  //         console.log(response.data);
-  //     })
+var app = angular.module('app', ['ngRoute']);
 
-    //Get all products
-    //GET POST DELETE PUT UPDATE
+app.controller('ApiController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
     $http.get(product_url)
       .then(function (response) {
           $scope.products = response.data;
@@ -132,27 +130,23 @@ app.controller('ApiController', ['$scope', '$http',  function ($scope, $http) {
         }
       }
     }
-  $scope.moreInfo = function (product) {
-    $('#moreInfo_modal').modal('show');
-    $scope.modalTitle = product.name;
-    $scope.modalBody = product.description;
-    $scope.modalPrice = product.price;
-  }
+
+    $scope.moreInfo = function (p) {
+      $scope.productInfo = p;
+      $location.path('product')
+    };
+
 }]);
 
-app.controller('PController', ['$scope', '$http', function ($scope, $http) {
-  $scope.postProduct = function (product) {
-    $http.post(product_post_url, product).then(function (res) {
-      $('#preview').modal('show');
-      $scope.result = "";
-    }).catch(function (e) {
-      console.log(e);
-      $('#preview').modal('show');
-      $scope.result = e.statusText;
-    });
-  };
-
-  $scope.al = function () {
-    alert();
-  };
-}]);
+app.config(function ($routeProvider) {
+  $routeProvider
+    .when('/product',{
+    templateUrl: 'product_view.html'
+  })
+  .when('/login',{
+    templateUrl: 'login.html'
+  })
+  .otherwise({
+    templateUrl: 'home.html'
+  });
+});

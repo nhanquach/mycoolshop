@@ -3,3 +3,16 @@
     border: 1px solid indigo;
     border-radius: 100px;
 }
+
+.badge{
+  margin: 1px;
+}
+
+.product_thumbnail > h4, h5{
+  color: black;
+  text-decoration: none !important;
+}
+
+.product_thumbnail > h4, h5:hover{
+  text-decoration: none;
+}

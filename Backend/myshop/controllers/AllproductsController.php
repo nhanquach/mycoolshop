@@ -38,16 +38,12 @@
 
     public function prepareDataProvider(){
       $rows = (new \yii\db\Query())
-      ->select(['p.id as id', 'p.name as name', 'p.price', 'p.description'])
-      ->from(['product p'])
-      ->distinct()
+      ->select(['p.id as id', 'p.name as name', 'p.price', 'p.description', 'p.created_at as created_at', 'p.seller as seller', 'p.available_start as start_time', 'p.available_end as end_time', 'p.image as image'])
+      ->from(['Product p'])
+      ->orderby(['created_at' => SORT_DESC])
       ->all();
 
       return $rows;
-    }
-
-    public function actionNo (){
-      die('This is No.');
     }
   }
 

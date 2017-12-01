@@ -1,0 +1,18 @@
+<div class="container" style="margin-top: 15px">
+  <div class="">
+    <h1 class="display-4">Nice to meet you.</h1>
+    <p class="lead">Feeling shopping?</p>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-4" ng-repeat="d in products" 
+    style="text-align: center; margin-top: 15px;">
+      <a class="product_thumbnail" href="" ng-click="moreInfo(d)">
+      <img ng-src="{{d.image}}" alt="Thumbnail" class="img-thumbnail" style="max-width: 250px; max-height: 250px">
+      <h4>{{d.name}}</h4>
+      <h5 class="lead">{{d.price| currency}}</h5>
+      </a>
+      <a class="btn btn-outline-info" ng-click="moreInfo(d)">See more</a>
+      <a class="btn btn-outline-primary" ng-click="addToCart(d)">Add to cart</a>
+    </div>
+  </div>
+</div>

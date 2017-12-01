@@ -31,11 +31,11 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'name', 'description', 'price'], 'required'],
+            [['id', 'name', 'description', 'price', 'image'], 'required'],
             [['id', 'price'], 'integer'],
             [['name'], 'string', 'max' => 50],
             [['description'], 'string', 'max' => 255],
-            [['image'], 'string', 'max' => 100],
+            [['image'], 'string', 'max' => 400],
             [['available_start'], 'string', 'max' => 25],
             [['available_end'], 'string', 'max' => 45],
         ];
