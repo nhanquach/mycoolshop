@@ -15,9 +15,9 @@ const subcategory_url = localhost + "subcategory";
 //const subcategory_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=subcategory";
 
 
-var app = angular.module('app', ['ngRoute']);
+var app = angular.module('app', ['ngRoute', 'ngCart', 'ngStorage']);
 
-app.controller('ApiController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+app.controller('ApiController', ['$scope', '$http', '$location', 'ngCart', '$localStorage', function ($scope, $http, $location, ngCart, $localStorage) {
     $http.get(product_url)
       .then(function (response) {
           $scope.products = response.data;
@@ -131,10 +131,92 @@ app.controller('ApiController', ['$scope', '$http', '$location', function ($scop
       }
     }
 
-    $scope.moreInfo = function (p) {
-      $scope.productInfo = p;
-      $location.path('product')
+  $scope.moreInfo = function (p) {
+    $scope.productInfo = p;
+    $location.path('product')
+  };
+  
+  function createRandomQuantity() {
+    var n = Math.ceil(Math.random() * 100);
+    $scope.rq = [];
+    for (var i = 1; i < n; i++) {
+      var o = {
+        'name': i,
+        'value': i
+      };
+      $scope.rq.push(o);
     };
+  };
+  
+  createRandomQuantity();
+
+  $scope.addToCart = function (product, quantity) {
+    console.log(quantity);
+    console.log(product);
+
+    if (isNaN(parseFloat(quantity)) || product == undefined) {
+      return false;
+    };
+
+    var cart_item = {
+      "id": product.id,
+      "name": product.name,
+      "price": parseFloat(product.price),
+      "quantity": parseFloat(quantity)
+    };
+    
+    var ids = [];
+
+    for (var i = 0; i < $localStorage.cart.length; i++){
+      ids.push($localStorage.cart[i].id);
+    }
+    console.log(ids);
+    
+    var flag = getItemIndex(cart_item.id, ids);
+
+    if ( flag == -1) {
+      $localStorage.cart.push(cart_item);
+    } else {
+      $localStorage.cart[flag].quantity = $localStorage.cart[flag].quantity + parseFloat(quantity);
+    }
+
+    updateCart();
+
+  };
+
+  function getItemIndex(id, ids) {
+    this.id = id;
+    this.ids = ids;
+    return ids.indexOf(id);  
+  };
+  
+  function updateCart() {
+    $scope.cart_items = $localStorage.cart;
+    $scope.cart_number = 0;
+    $scope.cart_money = 0;
+    for (var i = 0; i < $scope.cart_items.length; i++) {
+      $scope.cart_money += $scope.cart_items[i].price * $scope.cart_items[i].quantity;
+      $scope.cart_number = $scope.cart_number + $scope.cart_items[i].quantity;
+      console.log($scope.cart_money);
+      
+    };
+    
+  };
+
+  $scope.removeCartItem = function (item) {
+    var ids = [];
+    
+    for (var i = 0; i < $localStorage.cart.length; i++) {
+      ids.push($localStorage.cart[i].id);
+    };
+
+    var index = getItemIndex(item.id, ids)
+    $localStorage.cart.splice(index, 1);
+    
+    updateCart();
+  };
+
+  updateCart();
 
 }]);
 
