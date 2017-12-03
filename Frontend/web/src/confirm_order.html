@@ -1,0 +1,37 @@
+<div class="container">
+    <h1 class="display-4">Confirm your order</h1>
+
+    <div class="card card-body" style="margin-bottom: 2rem;">
+        <h3 class="lead card-title">Your Info</h3>
+        <p class="card-text">Name: </p>
+        <p class="card-text">Address: </p>
+        <p class="card-text">Note: </p>
+    </div>
+    
+    <div class="card card-body">
+        <h3 class="lead">Your item(s):</h3>
+        <table class="table table-bordered">
+            <thead>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price per product</th>
+                <th>Total</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in cart_items">
+                    <td>{{item.name}} </td>
+                    <td>{{item.quantity}} </td>
+                    <td>{{item.price | currency}} </td>
+                    <td>{{item.price*item.quantity | currency}} </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="text-align: right">
+            <p class="lead">Total:
+                <strong>{{cart_money | currency}}</strong>
+            </p>
+        </div>
+    </div>
+    <br/>
+    <a href="" class="btn btn-primary form-control">Confirm and order</a>
+</div>

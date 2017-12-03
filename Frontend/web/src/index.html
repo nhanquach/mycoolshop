@@ -55,7 +55,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title display-4">Your cart</h5>
+        <h5 class="modal-title"><i class="material-icons">shopping_cart</i> Your cart</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -63,11 +63,11 @@
       <div class="modal-body">
         <p>These are items in your cart:</p>
         <div>
-          <table class="table">
+          <table class="table table-bordered">
             <thead>
               <th>Name</th>
               <th>Quantity</th>
-              <th>Price</th>
+              <th>Price per product</th>
               <th>Total</th>
               <th>Action</th>
             </thead>
@@ -77,7 +77,11 @@
                 <td>{{item.quantity}} </td>
                 <td>{{item.price | currency}} </td>
                 <td>{{item.price*item.quantity | currency}} </td>
-                <td><a href="" ng-click="removeCartItem(item)" class="btn btn-link">remove</a></td>
+                <td style="text-align: center">
+                  <a style="color: red" href="" ng-click="removeCartItem(item)" class="btn btn-link">
+                    <span class="material-icons">delete</span>
+                  </a>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -87,7 +91,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Checkout</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="checkout()">Checkout</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>

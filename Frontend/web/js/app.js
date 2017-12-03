@@ -15,9 +15,9 @@ const subcategory_url = localhost + "subcategory";
 //const subcategory_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=subcategory";
 
 
-var app = angular.module('app', ['ngRoute', 'ngCart', 'ngStorage']);
+var app = angular.module('app', ['ngRoute', 'ngStorage']);
 
-app.controller('ApiController', ['$scope', '$http', '$location', 'ngCart', '$localStorage', function ($scope, $http, $location, ngCart, $localStorage) {
+app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage', function ($scope, $http, $location, $localStorage) {
     $http.get(product_url)
       .then(function (response) {
           $scope.products = response.data;
@@ -137,7 +137,7 @@ app.controller('ApiController', ['$scope', '$http', '$location', 'ngCart', '$loc
   };
   
   function createRandomQuantity() {
-    var n = Math.ceil(Math.random() * 100);
+    var n = Math.ceil(Math.random() * 30);
     $scope.rq = [];
     for (var i = 1; i < n; i++) {
       var o = {
@@ -166,11 +166,10 @@ app.controller('ApiController', ['$scope', '$http', '$location', 'ngCart', '$loc
     };
     
     var ids = [];
-
-    for (var i = 0; i < $localStorage.cart.length; i++){
+    
+    for (var i = 0; i < $localStorage.cart.length; i++) {
       ids.push($localStorage.cart[i].id);
     }
-    console.log(ids);
     
     var flag = getItemIndex(cart_item.id, ids);
 
@@ -194,12 +193,17 @@ app.controller('ApiController', ['$scope', '$http', '$location', 'ngCart', '$loc
     $scope.cart_items = $localStorage.cart;
     $scope.cart_number = 0;
     $scope.cart_money = 0;
-    for (var i = 0; i < $scope.cart_items.length; i++) {
-      $scope.cart_money += $scope.cart_items[i].price * $scope.cart_items[i].quantity;
-      $scope.cart_number = $scope.cart_number + $scope.cart_items[i].quantity;
-      console.log($scope.cart_money);
-      
-    };
+    try{
+      for (var i = 0; i < $scope.cart_items.length; i++) {
+        $scope.cart_money += $scope.cart_items[i].price * $scope.cart_items[i].quantity;
+        $scope.cart_number = $scope.cart_number + $scope.cart_items[i].quantity;
+        console.log($scope.cart_money);
+      };
+    }
+    catch (err) {
+      console.log(err);
+      $localStorage.cart = [];
+     }
     
   };
 
@@ -218,6 +222,13 @@ app.controller('ApiController', ['$scope', '$http', '$location', 'ngCart', '$loc
 
   updateCart();
 
+  /*
+  Checkout section
+  */
+  $scope.checkout = function () {
+    $location.path("/checkout");
+  }
+
 }]);
 
 app.config(function ($routeProvider) {
@@ -227,6 +238,15 @@ app.config(function ($routeProvider) {
   })
   .when('/login',{
     templateUrl: 'login.html'
+  })
+  .when('/checkout',{
+    templateUrl: 'checkout.html'
+    })
+  .when('/getInfo', {
+    templateUrl: 'getUserInfo.html'
+  })
+  .when('/confirm_order', {
+    templateUrl: 'confirm_order.html'
   })
   .otherwise({
     templateUrl: 'home.html'

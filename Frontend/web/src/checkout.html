@@ -1,0 +1,36 @@
+<div class="container">
+    <h1 class="display-4">Checkout</h1>
+    <p class="lead">All items: </p>
+    <table class="table table-bordered">
+        <thead>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Price per product</th>
+            <th>Total</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in cart_items">
+                <td>{{item.name}} </td>
+                <td>{{item.quantity}} </td>
+                <td>{{item.price | currency}} </td>
+                <td>{{item.price*item.quantity | currency}} </td>
+                <td style="text-align: center">
+                    <a style="color: red" href="" ng-click="removeCartItem(item)" class="btn btn-link">
+                        <span class="material-icons">delete</span>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="float-right">
+        <p class="lead">Total:
+            <strong>{{cart_money | currency}}</strong>
+        </p>
+    </div>
+    <br/><br/>
+    <div class="float-right" style="color: white">
+        <a href="#!" class="btn btn-default btn-secondary">Back to shop</a>
+        <a class="btn btn-primary" href="#!getInfo">Continue checkout</a>
+    </div>
+</div>
