@@ -4,9 +4,12 @@ Use localhost to development, because 000webhostapp limit the node.
 const localhost = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
 const product_url =localhost + "allproducts";
 const product_post_url = localhost + "allproducts/create";
-const extra_url =localhost + "productextra%2Fgetproductextra";
+const extra_url = localhost + "productextra%2Fgetproductextra";
 const category_url = localhost + "category";
 const subcategory_url = localhost + "subcategory";
+const emails_url = localhost + "signup";
+const signup_url = localhost + "signup/create"
+const signin_url = localhost + "login/create";
 
 //const product_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts";
 //const product_post_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts/create";
@@ -17,8 +20,144 @@ const subcategory_url = localhost + "subcategory";
 
 var app = angular.module('app', ['ngRoute', 'ngStorage']);
 
-app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage', function ($scope, $http, $location, $localStorage) {
-    $http.get(product_url)
+app.service('user_service', function () {
+  var user;
+  this.saveUser = function (data) {
+    user = data;
+  };
+  this.getUser = function () {
+    return user;
+  }
+});
+
+app.controller('SignupController', ['$scope', '$http', '$localStorage', '$timeout', 'user_service', function ($scope, $http, $localStorage, $timeout, user_service) {
+
+  /*
+  Notify system
+  */
+  $scope.showAlert = function (type, message, duration) {
+    if (isNaN(duration)) {
+      this.duration = 3000;
+    } else {
+      this.duration = duration;
+    }
+
+    $scope.alert = {
+      'type': "alert-" + type,
+      'message': message,
+      'show': true
+    };
+
+    $timeout(
+      function () {
+        $scope.alert = {
+          'type': "alert-" + type,
+          'message': message,
+          'show': false
+        };
+      }, this.duration);
+  };
+
+  /**
+   * Get a list of user's email
+   */
+  $scope.availableE = [];
+  $scope.invalid = "";
+
+  function getEmails() {
+    $http.get(emails_url)
+      .then(function (response) {
+        for (var i = 0; i < response.data.length; i++){
+          $scope.availableE.push(response.data[i].email);
+        }
+      })
+      .catch(function (e) {
+        console.log(e)
+      });
+  };
+  
+  getEmails();
+
+  function isAvailableEmail(email) {
+    var flag = false;
+    for (var i = 0; i < $scope.availableE.length; i++){
+      if (email == $scope.availableE[i]) {
+        return flag = true;
+      }
+    }
+    return flag;
+  };
+
+  $scope.checkEmail = function (email) {
+    var flag = isAvailableEmail(email);
+    if (flag) {
+      $scope.invalid = "is-invalid";
+    } else {
+      $scope.invalid = "";
+    }
+  }
+
+  //Signup new user
+  $scope.Signup = function (account) {
+    if (isMatchPassword(account.pass1, account.pass2) == false) {
+      $scope.showAlert("warning", "Password not match", 3000);
+    } else {
+      this.account = {
+        'email': account.email,
+        'password': account.pass1,
+        'username': account.email,
+      };
+
+      $http.post(signup_url, this.account)
+        .then(function () {
+          $scope.showAlert("success", "Awesome! Welcome to our shop. Sign in now.", 100000);
+        })
+        .catch(function (err) {
+          $scope.showAlert("warning", "Failed to create new User.", 4000);
+      })  ;
+    }
+  }
+
+  function isMatchPassword(pass1, pass2) {
+    return (pass1 === pass2);
+  };
+
+}]);
+
+app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage', '$timeout', 'user_service', function ($scope, $http, $location, $localStorage, $timeout, user_service) {
+
+  $scope.user_status;
+
+  //Login user and save session.
+  $scope.login = function (user) {
+    $http.post(signin_url + "&email=" + user.email + "&password=" + user.password)
+      .then(function (data) {
+        user_service.saveUser(data.data);
+        $scope.user_status = user_service.getUser().email;
+        $localStorage.singinUser = user_service.getUser();
+        console.log($scope.user_status);
+      })
+      .catch(function (err) {
+        console.log(err);
+      })
+  };
+
+  function checkCurrentUser() {
+    console.log($localStorage.singinUser);
+    var now_user = $localStorage.singinUser;
+    if (now_user != undefined) {
+      $scope.user_status = now_user.email;
+    }
+  };
+
+  checkCurrentUser();
+
+  $scope.logout = function () {
+    $localStorage.singinUser = "";
+    $scope.user_status = "";
+  };
+
+  $http.get(product_url)
       .then(function (response) {
           $scope.products = response.data;
       })
@@ -67,6 +206,32 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
         })
 
     }
+  
+  /*
+  Notify system
+  */
+  $scope.showAlert = function (type, message, duration) {
+    if (isNaN(duration)) {
+      this.duration = 3000;
+    } else {
+      this.duration = duration;
+    }
+
+    $scope.alert = {
+      'type': "alert-" + type,
+      'message': message,
+      'show': true
+    };
+
+    $timeout(
+      function () {
+        $scope.alert = {
+          'type': "alert-" + type,
+          'message': message,
+          'show': false
+        };
+      }, this.duration);
+  };
 
     function isCategoryAvailable(category, c) {
       for (var i = 0; i < category.length; i++) {
@@ -154,7 +319,8 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
     console.log(quantity);
     console.log(product);
 
-    if (isNaN(parseFloat(quantity)) || product == undefined) {
+    if (isNaN(parseFloat(quantity)) || product == undefined || quantity == undefined) {
+      $scope.showAlert("warning", "Oops, some thing went wrong.", 3000);
       return false;
     };
 
@@ -178,7 +344,7 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
     } else {
       $localStorage.cart[flag].quantity = $localStorage.cart[flag].quantity + parseFloat(quantity);
     }
-
+    $scope.showAlert("success", "Product added to Cart", 2000);
     updateCart();
 
   };

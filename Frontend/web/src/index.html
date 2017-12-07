@@ -20,7 +20,7 @@
 
 <body ng-app="app" ng-controller="ApiController">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">MyCoolShop</a>
+    <a class="navbar-brand display-4" href="#">MyCoolShop</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -28,7 +28,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#!">Home<span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="#!">Shop<span class="sr-only">(current)</span></a>
         </li>
         <!-- <li class="nav-item">
           <a class="nav-link" href="post.html">POST</a>
@@ -42,11 +42,36 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="#!/login" class="nav-link">Log in/Sign up</a>
+          <a ng-if="!user_status" href="#!/login" class="nav-link">Log in/Sign up
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a ng-if="user_status" href="" class="nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="material-icons">account_circle</span>{{user_status}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item disabled">Welcome, {{user_status}}</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">My account</a>
+            <a class="dropdown-item" href="#">My order(s)</a>
+            <a class="dropdown-item" href="#">My shipping address(es)</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a ng-if="user_status" class="nav-link" ng-click="logout()">
+            Log out
+          </a>
         </li>
       </ul>
     </div>
   </nav>
+
+
+  <div class="container">
+    <div class="alert fade show {{alert.type}}" ng-if="alert.show" role="alert">
+      {{alert.message}}
+    </div>
+  </div>
 
   <ng-view  onload=""  $autoscroll=""></ng-view>
 
@@ -98,6 +123,11 @@
   </div>
 </div>
 
+<script>
+  $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+</script>
 </body>
 
 </html>
