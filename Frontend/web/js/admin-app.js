@@ -14,6 +14,7 @@ const subcategory_url = localhost + "subcategory";
 const product_post_url = localhost + "allproducts/create";
 const category_post_url = localhost + "category/create"
 const subcategory_post_url = localhost + "subcategory/create";
+const extra_post_url = localhost + "productextra/create"
 
 //Login URL
 const user_login_url = localhost + "login" + and + "create";
@@ -141,12 +142,34 @@ app.controller('AdminController', ['$scope', '$http', '$location', '$localStorag
     }
 
     new_product(product)
+
+    for (var i = 0; i < p.subcategory.length; i++){
+      for (var j = 0; j < p.category.length; j++){
+        var extra = {
+          'product_id': id,
+          'category_id': p.category[j],
+          'subcategory_id': p.subcategory[i]
+        };
+        new_extra(extra);
+      }
+    }
   }
+
+  var new_extra = function (extra) {
+    console.log(extra_post_url);
+    //[['product_id', 'category_id', 'subcategory_id'], 'required']
+    $http.post(extra_post_url, extra)
+      .then(function () {
+        $scope.status = "Got it!";
+      })
+      .catch(function (err) {
+        console.log(err);
+      })
+  };
 
   var new_product = function (product) {
     $http.post(product_post_url, product)
       .then(function (response) {
-        console.log(response.data);
         $scope.status = "New product added.";
       })
       .catch(function (e) {

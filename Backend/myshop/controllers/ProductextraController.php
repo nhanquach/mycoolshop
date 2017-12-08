@@ -47,10 +47,6 @@
         return $s;
       }
     }
-
-    public function actionNo (){
-      die('This is No.');
-    }
   }
 
 ?>

@@ -8,7 +8,7 @@
 
     <div class="col">
       <label for="">Product image</label>
-      <div class="" ng-controller="UploadCtrl as $ctrl">
+      <div class="form-control" ng-controller="UploadCtrl as $ctrl">
         <div>
           <file-upload on-change="$ctrl.onChange">
             Upload an image
@@ -31,15 +31,15 @@
     <label for="" class="">Product description</label>
     <textarea type="text" name="" value="" rows="10" ng-model="product.description" class="form-control"></textarea>
   </div>
-  <div class="">
-    <label for="category" class="">Category</label>
+  <div class="" style="margin-top: 10px;">
+    <label for="category" class="">Category <a data-toggle='modal' href="" data-target="#CategoryModal" class="btn btn-outline-dark btn-sm">new Category</a></label>
     <select multiple class="form-control category" ng-model="product.category">
       <option ng-repeat="a in a_category" value="{{a.id}}">{{a.name}}</option>
     </select>
-    <small>Hold "ctrl" to select multiple categories.</small>
+    <small>Hold "ctrl (or Shift)" to select multiple categories.</small>
   </div>
-  <div class="">
-    <label for="sub" class="">Subcategory</label>
+  <div class="" style="margin-top: 10px;">
+    <label for="sub" class="">Subcategory <a href="" data-toggle='modal' href="" data-target="#SubcategoryModal" class="btn btn-outline-dark btn-sm">new Subcategory</a></label>
     <select multiple name="subcategory" class="form-control subcategory" ng-model="product.subcategory">
       <option ng-repeat="a in a_subcategory" value="{{a.id}}">{{a.name}}</option>
     </select>
@@ -78,4 +78,5 @@
     <button type="button" name="button" class="btn btn-primary" ng-click="post_product(product);">Post product</button>
   </div>
   <br/>
+  
 </div>
