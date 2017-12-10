@@ -1,15 +1,21 @@
 /*
 Use localhost to development, because 000webhostapp limit the node.
 */
-const localhost = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
-const product_url =localhost + "allproducts";
-const product_post_url = localhost + "allproducts/create";
-const extra_url = localhost + "productextra%2Fgetproductextra";
-const category_url = localhost + "category";
-const subcategory_url = localhost + "subcategory";
-const emails_url = localhost + "signup";
-const signup_url = localhost + "signup/create"
-const signin_url = localhost + "login/create";
+const host = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
+
+/**
+ * //Uncomment this to use the 000webhostapp as host.
+ * const host = "https://mycoolshop.000webhostapp.com/web/index.php?r=";
+ */
+
+const product_url =host + "allproducts";
+const product_post_url = host + "allproducts/create";
+const extra_url = host + "productextra%2Fgetproductextra";
+const category_url = host + "category";
+const subcategory_url = host + "subcategory";
+const emails_url = host + "signup";
+const signup_url = host + "signup/create"
+const signin_url = host + "login/create";
 
 //const product_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts";
 //const product_post_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts/create";

@@ -2,22 +2,27 @@
 Use localhost to development, because 000webhostapp limit the node.
 */
 const and = "%2F";
-const localhost = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
+const host = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
+
+/**
+ * //Uncomment this to use the 000webhostapp as host.
+ * const host = "https://mycoolshop.000webhostapp.com/web/index.php?r=";
+ */
 
 //URL for getting data
-const product_url = localhost + "allproducts";
-const extra_url =localhost + "productextra%2Fgetproductextra";
-const category_url = localhost + "category";
-const subcategory_url = localhost + "subcategory";
+const product_url = host + "allproducts";
+const extra_url =host + "productextra%2Fgetproductextra";
+const category_url = host + "category";
+const subcategory_url = host + "subcategory";
 
 //URL for doing something.
-const product_post_url = localhost + "allproducts/create";
-const category_post_url = localhost + "category/create"
-const subcategory_post_url = localhost + "subcategory/create";
-const extra_post_url = localhost + "productextra/create"
+const product_post_url = host + "allproducts/create";
+const category_post_url = host + "category/create"
+const subcategory_post_url = host + "subcategory/create";
+const extra_post_url = host + "productextra/create"
 
 //Login URL
-const user_login_url = localhost + "login" + and + "create";
+const user_login_url = host + "login" + and + "create";
 
 //const product_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts";
 //const product_post_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts/create";

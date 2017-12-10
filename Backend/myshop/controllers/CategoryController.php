@@ -5,6 +5,8 @@
   use yii\filters\auth\HttpBasicAuth;
 
   use app\models\Category;
+  use app\models\Product;
+  use app\models\ProductExtra;
 
   /**
    *
@@ -50,8 +52,26 @@
       }
     }
 
-    public function actionNo (){
-      die('This is No.');
+    /**
+     * This function is to get all the Product(s) in the same Category.
+     * Requires $id.
+     * How to use: http://localhost:8080/index.php?r=subcategory/get&id=$id
+     * Return Product object(s) if avaiable.
+     */
+    public function actionGet($id)
+    {
+      $c = new Category();
+      $p = new Product();
+      $e = new ProductExtra();
+      $o = array();
+      
+      $cate_id = $c::find()->where(['id'=>$id])->one();
+      $product_extra_ids = $e::find()->select(['product_id'])->where(['category_id'=>$cate_id])->all();
+      for($i=0;$i< sizeof($product_extra_ids);$i++){
+        $result = $p::find()->where(['id'=>$product_extra_ids[$i]])->distinct()->one();
+        array_push($o, $result);
+      };
+      return $o;
     }
   }
 
