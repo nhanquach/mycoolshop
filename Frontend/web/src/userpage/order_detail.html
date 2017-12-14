@@ -1,0 +1,24 @@
+<div class="container">
+    <h1 class="display-4">Order details</h1>
+    <p class="lead">ID: #{{o.id_order_products}}</p>
+    <p class="lead">Order on {{o.created_at|date:"MM/dd/yyyy"}}</p>
+    <p class="lead">ETA: {{o.ETA|date:"MM/dd/yyyy"}}</p>
+    <p class="lead">Status: <span style="color: teal; font-weight:bold;">{{o.status}}</span></p>
+    <table class="table">
+        <thead>
+            <th>Product ID</th>
+            <th>Product name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="d in detail">
+                <td>{{d.product_id}}</td>
+                <td>{{d.product_name}}</td>
+                <td>{{d.product_quantity}}</td>
+                <td>{{d.product_price|currency }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="float-right">Total: {{o.price|currency}}</p>
+</div>

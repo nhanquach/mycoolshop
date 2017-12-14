@@ -7,11 +7,11 @@
         <form>
           <div class="">
             <label for="email">Email</label>
-            <input ng-model = "user.email" type="email" name="email" value="" class="form-control">
+            <input ng-model = "user.email" type="email" name="email" value="" class="form-control" required>
           </div>
           <div class="">
             <label for="password">Password</label>
-            <input ng-model="user.password" type="password" name="password" value="" class="form-control">
+            <input ng-model="user.password" type="password" name="password" value="" class="form-control" required>
           </div>
           <div class="">
             <br/>
@@ -41,13 +41,17 @@
               This email is used to signup for another account.
             </div>
           </div>
+          <div>
+            <label for="username">Your name</label>
+            <input type="text" ng-model="account.username" class="form-control">
+          </div>
           <div class="">
             <label for="password">Password</label>
-            <input ng-model="account.pass1" type="password" name="password" value="" class="form-control">
+            <input ng-model="account.pass1" type="password" name="password" value="" class="form-control" required>
           </div>
           <div class="">
             <label for="password">Confirm Password</label>
-            <input ng-model="account.pass2" type="password" name="password" value="" class="form-control">
+            <input ng-model="account.pass2" type="password" name="password" value="" class="form-control" required>
           </div>
           <div class="">
             <br/>

@@ -13,6 +13,11 @@
   {
     public $modelClass = 'app\models\Loginuser';
 
+    public function actionHi($var)
+    {
+      $u = $var->password;
+      return $u;
+    }
   }
 
 ?>

@@ -16,13 +16,11 @@ const subcategory_url = host + "subcategory";
 const emails_url = host + "signup";
 const signup_url = host + "signup/create"
 const signin_url = host + "login/create";
-
-//const product_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts";
-//const product_post_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts/create";
-//const extra_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=productextra";
-//const category_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=category";
-//const subcategory_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=subcategory";
-
+const user_update_url = host + "signup/update";
+const user_orders_url = host + "order/getfrom&id=";
+const order_post_url = host + "order/create"
+const orderproducts_post_url = host + "orderproducts/create"
+const order_product_url = host + "orderproducts/getproductfrom&id=";
 
 var app = angular.module('app', ['ngRoute', 'ngStorage']);
 
@@ -111,7 +109,7 @@ app.controller('SignupController', ['$scope', '$http', '$localStorage', '$timeou
       this.account = {
         'email': account.email,
         'password': account.pass1,
-        'username': account.email,
+        'username': account.username,
       };
 
       $http.post(signup_url, this.account)
@@ -134,14 +132,16 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
 
   $scope.user_status;
 
-  //Login user and save session.
+  /*
+  * Login user and save session.
+  */
   $scope.login = function (user) {
     $http.post(signin_url + "&email=" + user.email + "&password=" + user.password)
       .then(function (data) {
         user_service.saveUser(data.data);
-        $scope.user_status = user_service.getUser().email;
-        $localStorage.singinUser = user_service.getUser();
-        console.log($scope.user_status);
+        $scope.user_status = user_service.getUser().username;
+        $localStorage.signinUser = user_service.getUser();
+        $('#modal_signin').modal('hide');
       })
       .catch(function (err) {
         console.log(err);
@@ -149,18 +149,18 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
   };
 
   function checkCurrentUser() {
-    console.log($localStorage.singinUser);
-    var now_user = $localStorage.singinUser;
+    var now_user = $localStorage.signinUser;
     if (now_user != undefined) {
-      $scope.user_status = now_user.email;
+      $scope.user_status = now_user.username;
     }
   };
 
   checkCurrentUser();
 
   $scope.logout = function () {
-    $localStorage.singinUser = "";
+    $localStorage.signinUser = "";
     $scope.user_status = "";
+    $location.path("/");
   };
 
   $http.get(product_url)
@@ -302,6 +302,10 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
       }
     }
 
+  /**
+   * Click a product to go to MoreInfo page.
+   * @param {product} p 
+   */
   $scope.moreInfo = function (p) {
     $scope.productInfo = p;
     $location.path('product')
@@ -321,9 +325,10 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
   
   createRandomQuantity();
 
+  /**
+   * Cart section
+   */
   $scope.addToCart = function (product, quantity) {
-    console.log(quantity);
-    console.log(product);
 
     if (isNaN(parseFloat(quantity)) || product == undefined || quantity == undefined) {
       $scope.showAlert("warning", "Oops, some thing went wrong.", 3000);
@@ -369,7 +374,6 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
       for (var i = 0; i < $scope.cart_items.length; i++) {
         $scope.cart_money += $scope.cart_items[i].price * $scope.cart_items[i].quantity;
         $scope.cart_number = $scope.cart_number + $scope.cart_items[i].quantity;
-        console.log($scope.cart_money);
       };
     }
     catch (err) {
@@ -395,12 +399,169 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
   updateCart();
 
   /*
-  Checkout section
+  * Checkout section
   */
   $scope.checkout = function () {
     $location.path("/checkout");
   }
 
+  $scope.status = "Have an account? Sign in to auto-fill.";
+
+  if ($scope.user_status != undefined) {
+    $scope.status = "Auto fill";
+  }
+  
+  $scope.order = {};
+  
+  $scope.auto_fill = function () {
+    if ($scope.user_status == undefined) { 
+      $('#modal_signin').modal('show');
+    } else {
+      let user = $localStorage.signinUser;
+      $scope.order = user;
+      $scope.order.user_name = user.username;
+      $scope.order.email = user.email;
+      $scope.order.id_user = user._id;
+    }
+  }
+
+  $scope.confirmOrder = function (order, items) {
+    var order_id = Math.random().toString().slice(2, 11);
+    if ($scope.order.id_user == "" || $scope.order.id_user == undefined){
+      var id_user = Math.random().toString().slice(2, 11);
+      $scope.order.id_user = id_user;
+    }
+
+    if (order.delivery_note == undefined) {
+      order.delivery_note = "none";
+    };
+    
+    $scope.cart_items = items;
+    
+    $scope.order.id_order_products = order_id;
+    
+    $location.path("/confirm_order");
+  }
+
+  $scope.placeOrder = function (order, items) {
+    order.price = $scope.cart_money;
+    $scope.order._id = null;
+    $http.post(order_post_url, $scope.order)
+      .then(function (data) {
+        console.log(data.data);
+        for (var i = 0; i < items.length; i++) {
+          let order_products = {
+            'order_id': order.id_order_products,
+            'product_id': items[i].id,
+            'product_name': items[i].name,
+            'product_price': items[i].price,
+            'product_quantity': items[i].quantity
+          };
+          $http.post(orderproducts_post_url, order_products)
+            .then(function (data) {
+              console.log(data.data);
+              $('#modal_thankyou').modal('show');
+            })
+            .catch(function (err) {
+              console.log(err);
+            });
+        };
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
+  $scope.backtoShop = function () {
+    $('#modal_thankyou').modal('hide');
+    $localStorage.cart = [];
+    $location.path("/");
+    $scope.cart_items = "";
+    $scope.cart_money = 0;
+    $scope.cart_number = 0;
+  };
+
+  /**
+   * User management Section
+   */
+
+  $scope.gotoUserHome = function () {
+    $location.path("/user_home");  
+  };
+
+  $scope.getUserInfo = function () {
+    $localStorage.signinUser.user_name = $localStorage.signinUser.username;
+    $scope.order = $localStorage.signinUser;
+  };
+
+  $scope.updateInfo = function () {
+    let user = $scope.order;
+
+    if (user.phone[0] != 0) {
+      user.phone = "0" + user.phone.toString(); 
+    } else {
+      user.phone = user.phone.toString();
+    }
+    user.username = $scope.order.user_name;
+
+    $http.put(user_update_url + "&id=" + user._id + "/update", user)
+      .then(function (data) {
+        $scope.showAlert("success", "Profile update successfully.", 2000);
+        $localStorage.signinUser = data.data;
+      })
+      .catch(function (err) {
+        $scope.showAlert("success", err, 2000);
+      });
+  };
+
+  /**
+   * Get user's Orders
+   */
+  $scope.getUserOrders = function () {
+    let user = $localStorage.signinUser;
+    
+    $http.post(user_orders_url + user.id_user)
+      .then(function (data) {
+        classifyOrders(data.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+    });
+  };
+  
+  function classifyOrders(orders) {
+    $scope.upcomming_orders = [];
+    $scope.done_orders = [];
+    $scope.cancelled_orders = [];
+    for (var i = 0; i < orders.length; i++) {
+      if (orders[i].status == "PROGRESSING") {
+        orders[i].created_at = moment(orders[i].created_at);
+        orders[i].ETA = orders[i].created_at.add(5, "days");
+        $scope.upcomming_orders.push(orders[i]);
+      } else
+      if (orders[i].status == "DONE") {
+        $scope.done_orders.push(orders[i]);
+      } else
+      if (orders[i].status == "CANCELLED") {
+        $scope.cancelled_orders.push(orders[i]);
+      };
+    };
+  }
+
+  $scope.getOrderProducts = function (order) {
+    $http.get(order_product_url + order.id_order_products)
+      .then(function (data) {
+        $location.path("/order_detail");
+        $scope.detail = data.data;
+        $scope.o = order;
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+
+  }
+  
+  
 }]);
 
 app.config(function ($routeProvider) {
@@ -418,8 +579,23 @@ app.config(function ($routeProvider) {
     templateUrl: 'getUserInfo.html'
   })
   .when('/confirm_order', {
+  templateUrl: 'confirm_order.html'
+  })
+  .when('/user_home', {
+    templateUrl: 'userpage/home.html'
+  })
+  .when('/order_detail', {
+    templateUrl: 'userpage/order_detail.html'
+  })  
+  .when('/user_order', {
     templateUrl: 'confirm_order.html'
   })
+  .when('/user_address', {
+    templateUrl: 'confirm_order.html'
+    })
+  .when('/edit_account', {
+    templateUrl: 'userpage/edit_account.html'  
+  })  
   .otherwise({
     templateUrl: 'home.html'
   });

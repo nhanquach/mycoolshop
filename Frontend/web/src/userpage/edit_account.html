@@ -1,0 +1,25 @@
+<div class="container" ng-init="getUserInfo();">
+    <h4 class="display-4">Edit info</h4>
+    <form>
+        <div>
+            <label for="name">Your name</label>
+            <input ng-model="order.user_name" type="text" class="form-control" value="">
+        </div>
+        <div>
+            <label for="name">Your phone number</label>
+            <input ng-model="order.phone" type="tel" class="form-control" value="">
+        </div>
+        <div>
+            <label for="name">Your email address</label>
+            <input disabled ng-model="order.email" type="email" class="form-control" value="">
+        </div>
+        <div>
+            <label for="address">Shipping Address</label>
+            <input ng-model="order.address" type="text" class="form-control">
+        </div>
+        <br/>
+        <div>
+            <button ng-click="updateInfo();" class="btn btn-primary">Update</button>
+        </div>
+    </form>
+</div>
