@@ -1,0 +1,32 @@
+<div class="container-fluid" ng-controller="manage_productController">
+    <h1 class="display-4">Manage Products</h1>
+    <table class="table table-bordered table-responsive table-hover table-dark">
+        <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Categories</th>
+            <th>Subcategories</th>
+            <th>Added on</th>
+            <th>Available time</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="p in products">
+                <td>{{p.id}}</td>
+                <td>{{p.name}}</td>
+                <td>{{p.price | currency}}</td>
+                <td>
+                    <p ng-repeat="c in p.category">{{c.name}}</p>
+                </td>
+                <td>
+                    <p ng-repeat="c in p.subcategory">{{c.name}}</p>
+                </td>
+                <td>{{p.created_at}}</td>
+                <td>{{p.start_time}} to {{p.end_time}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <pre>
+{{products |json}}
+    </pre>
+</div>

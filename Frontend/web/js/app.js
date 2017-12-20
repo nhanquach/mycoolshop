@@ -8,7 +8,8 @@ const host = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
  * const host = "https://mycoolshop.000webhostapp.com/web/index.php?r=";
  */
 
-const product_url =host + "allproducts";
+//const product_url =host + "allproducts";
+const product_url =host + "allproducts/getproducts";
 const product_post_url = host + "allproducts/create";
 const extra_url = host + "productextra%2Fgetproductextra";
 const category_url = host + "category";
@@ -79,7 +80,7 @@ app.controller('SignupController', ['$scope', '$http', '$localStorage', '$timeou
         console.log(e)
       });
   };
-  
+
   getEmails();
 
   function isAvailableEmail(email) {
@@ -167,54 +168,12 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
       .then(function (response) {
           $scope.products = response.data;
       })
-      .then (function (res) {
-        for (var i = 0; i < $scope.products.length; i++) {
-          $scope.products[i].category = [];
-          $scope.products[i].subcategory = [];
-        }
-        getExtraField();
-      })
       .catch(function (e) {
           $scope.data = e;
       });
 
-    function getExtraField() {
-      $http.get(extra_url)
-      .then(function (res) {
-        $scope.extra = res.data;
-        getCategory();
-      })
-      .catch(function (e) {
-        console.log(e);
-      })
-    };
-
-    function getCategory() {
-      //Get product's category name.
-      $http.get(category_url)
-        .then(function (res) {
-          $scope.categories = res.data;
-        })
-        .then(function () {
-          getSubcategory();
-        })
-
-    }
-
-    function getSubcategory() {
-      //Get product's category name.
-      $http.get(subcategory_url)
-        .then(function (res) {
-          $scope.subcategories = res.data;
-        })
-        .then(function () {
-          addExtraField();
-        })
-
-    }
-  
   /*
-  Notify system
+  * Notify system
   */
   $scope.showAlert = function (type, message, duration) {
     if (isNaN(duration)) {
@@ -304,13 +263,13 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
 
   /**
    * Click a product to go to MoreInfo page.
-   * @param {product} p 
+   * @param {product} p
    */
   $scope.moreInfo = function (p) {
     $scope.productInfo = p;
     $location.path('product')
   };
-  
+
   function createRandomQuantity() {
     var n = Math.ceil(Math.random() * 30);
     $scope.rq = [];
@@ -322,7 +281,7 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
       $scope.rq.push(o);
     };
   };
-  
+
   createRandomQuantity();
 
   /**
@@ -341,13 +300,13 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
       "price": parseFloat(product.price),
       "quantity": parseFloat(quantity)
     };
-    
+
     var ids = [];
-    
+
     for (var i = 0; i < $localStorage.cart.length; i++) {
       ids.push($localStorage.cart[i].id);
     }
-    
+
     var flag = getItemIndex(cart_item.id, ids);
 
     if ( flag == -1) {
@@ -363,9 +322,9 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
   function getItemIndex(id, ids) {
     this.id = id;
     this.ids = ids;
-    return ids.indexOf(id);  
+    return ids.indexOf(id);
   };
-  
+
   function updateCart() {
     $scope.cart_items = $localStorage.cart;
     $scope.cart_number = 0;
@@ -380,19 +339,19 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
       console.log(err);
       $localStorage.cart = [];
      }
-    
+
   };
 
   $scope.removeCartItem = function (item) {
     var ids = [];
-    
+
     for (var i = 0; i < $localStorage.cart.length; i++) {
       ids.push($localStorage.cart[i].id);
     };
 
     var index = getItemIndex(item.id, ids)
     $localStorage.cart.splice(index, 1);
-    
+
     updateCart();
   };
 
@@ -410,11 +369,11 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
   if ($scope.user_status != undefined) {
     $scope.status = "Auto fill";
   }
-  
+
   $scope.order = {};
-  
+
   $scope.auto_fill = function () {
-    if ($scope.user_status == undefined) { 
+    if ($scope.user_status == undefined) {
       $('#modal_signin').modal('show');
     } else {
       let user = $localStorage.signinUser;
@@ -435,11 +394,11 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
     if (order.delivery_note == undefined) {
       order.delivery_note = "none";
     };
-    
+
     $scope.cart_items = items;
-    
+
     $scope.order.id_order_products = order_id;
-    
+
     $location.path("/confirm_order");
   }
 
@@ -486,7 +445,7 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
    */
 
   $scope.gotoUserHome = function () {
-    $location.path("/user_home");  
+    $location.path("/user_home");
   };
 
   $scope.getUserInfo = function () {
@@ -498,7 +457,7 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
     let user = $scope.order;
 
     if (user.phone[0] != 0) {
-      user.phone = "0" + user.phone.toString(); 
+      user.phone = "0" + user.phone.toString();
     } else {
       user.phone = user.phone.toString();
     }
@@ -519,25 +478,33 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
    */
   $scope.getUserOrders = function () {
     let user = $localStorage.signinUser;
-    
+
+    if (user._id != null) {
+      user.id_user = user._id;
+    };
+    console.log(user_orders_url + user.id_user)
     $http.post(user_orders_url + user.id_user)
       .then(function (data) {
+        console.log(data.data);
         classifyOrders(data.data);
       })
       .catch(function (err) {
         console.log(err);
     });
   };
-  
+
   function classifyOrders(orders) {
     $scope.upcomming_orders = [];
     $scope.done_orders = [];
     $scope.cancelled_orders = [];
+
     for (var i = 0; i < orders.length; i++) {
       if (orders[i].status == "PROGRESSING") {
         orders[i].created_at = moment(orders[i].created_at);
-        orders[i].ETA = orders[i].created_at.add(5, "days");
+        let temp_eta = moment(orders[i].created_at).add(5, "days");
+        orders[i].ETA = temp_eta;
         $scope.upcomming_orders.push(orders[i]);
+        console.log($scope.upcomming_orders);
       } else
       if (orders[i].status == "DONE") {
         $scope.done_orders.push(orders[i]);
@@ -560,8 +527,8 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
       });
 
   }
-  
-  
+
+
 }]);
 
 app.config(function ($routeProvider) {
@@ -586,7 +553,7 @@ app.config(function ($routeProvider) {
   })
   .when('/order_detail', {
     templateUrl: 'userpage/order_detail.html'
-  })  
+  })
   .when('/user_order', {
     templateUrl: 'confirm_order.html'
   })
@@ -594,8 +561,8 @@ app.config(function ($routeProvider) {
     templateUrl: 'confirm_order.html'
     })
   .when('/edit_account', {
-    templateUrl: 'userpage/edit_account.html'  
-  })  
+    templateUrl: 'userpage/edit_account.html'
+  })
   .otherwise({
     templateUrl: 'home.html'
   });

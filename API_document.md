@@ -8,9 +8,9 @@ Localhost:
 
 ### Tất cả các APIs đều có thể được truy cập thẳng bằng trình duyệt, tôi khuyến khích các bạn hãy thử qua gọi trên trình duyệt để biết APIs trả về những thông tin nào.
 
-##1. <u>Các APIs bình thường:</u>
+## 1. <u>Các APIs bình thường:</u>
 
-####Products APIs
+#### Products APIs
 
 - Đường dẫn để lấy các sản phẩm đã được lưu, đường dẫn này nhận phương thức GET:  ```url + "allproducts"```
 
@@ -19,7 +19,7 @@ Localhost:
   - Yêu cầu phải có các tham số: **'id', 'name', 'description', 'price', 'image'**.
   - Xem thêm file ``Product.php`` trong ``Backend/myshop/models``
 
-  ####Category APIs
+  #### Category APIs
 
 - Đường dẫn để lấy các Category đã được lưu, đường dẫn này nhận phương thức GET:  ``url + "category"``
 
@@ -28,7 +28,7 @@ Localhost:
   -  Yêu cầu phải có các tham số: **'id', 'name'**
   -  Xem thêm file ``Category.php`` trong ``Backend/myshop/models``
 
-  ####Subcategory APIs
+  #### Subcategory APIs
 
 - Đường dẫn để lấy các Subcategory đã được lưu, đường dẫn này nhận phương thức GET:  ``url + "subcategory"``
 
@@ -37,7 +37,7 @@ Localhost:
   -  Yêu cầu phải có các tham số: **'id', 'name'**
   -  Xem thêm file ``Subcategory.php`` trong ``Backend/myshop/models``
 
-  ####Product Extra APIs
+  #### Product Extra APIs
 
 - Đường dẫn để lấy các ProductExtra đã được lưu, đường dẫn này nhận phương thức GET:  ``url + "productextra"``
 
@@ -87,12 +87,12 @@ Localhost:
     - Yêu cầu bắt buộc phải có: **'order_id'**, **'product_id'**, **'product_name'**, **'product_price'**, **'product_quantity'**
       - Trong đó: **'order_id'** là **id** của **order**, một đơn hàng sẽ có một order_id vì vậy khi lưu order, chúng ta sẽ dùng order_id của order đó để lưu trong bảng Order_Product luôn.
 
-##2. <u>Các APIs bất thường</u>
+## 2. <u>Các APIs bất thường</u>
 
 - Để đăng nhập một user, sử dụng đường dẫn ``url + "login/create" + "&email=" + user.email + "&password=" + user.password`` ==> sẽ trả về 1 Object User nếu xác thực thành công.
   *Trong đó user.email và user.password là email và password của người đăng nhập.*
 
-#####Xem qua 2 file ``app.js`` và ``app-admin.js`` để thấy ví dụ cụ thể hơn.**
+##### Xem qua 2 file ``app.js`` và ``app-admin.js`` để thấy ví dụ cụ thể hơn.**
 
 ##3. <u>Lưu ý nhỏ</u>
 Để lấy được *Order* và những thông tin các sản phẩm trong Order của một User thì chúng ta có thể làm như sau:

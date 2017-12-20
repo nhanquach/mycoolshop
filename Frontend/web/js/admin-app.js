@@ -14,15 +14,26 @@ const product_url = host + "allproducts";
 const extra_url =host + "productextra%2Fgetproductextra";
 const category_url = host + "category";
 const subcategory_url = host + "subcategory";
+const user_orders_url = host + "order/getfrom&id=";
+const order_url = host + "order";
+const order_products_url = host + "orderproducts";
+const order_product_fromid_url = host + "orderproducts/getproductfrom&id=";
+
 
 //URL for doing something.
 const product_post_url = host + "allproducts/create";
 const category_post_url = host + "category/create"
 const subcategory_post_url = host + "subcategory/create";
 const extra_post_url = host + "productextra/create"
+//http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=order/update&id_order_products=054915212
+const order_update_url = host + "order/update&id=";
 
 //Login URL
 const user_login_url = host + "login" + and + "create";
+
+const order_post_url = host + "order/create"
+const orderproducts_post_url = host + "orderproducts/create"
+
 
 //const product_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts";
 //const product_post_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts/create";
@@ -249,6 +260,107 @@ app.controller('AdminController', ['$scope', '$http', '$location', '$localStorag
   /* Scope variable for display data to table */
   $scope.a_category = $scope.getAvailableCategory();
 
+
+  /**
+   * Order management section
+   */
+
+  $scope.getOrders = function () {
+    $http.get(order_url)
+      .then(function (data) {
+        resolveData(data.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
+  var resolveData = function (data) {
+    for (var i = 0; i < data.length; i++) {
+      data[i].created_at = moment(data[i].created_at);
+      let m = moment(data[i].created_at);
+      data[i].eta = m.add(5, "days");
+
+
+      let order_status1 = "DONE";
+      let order_status2 = "CANCELLED";
+      let order_status3 = "PROGRESSING";
+      if (data[i].status == order_status3) {
+        data[i].state = "";
+        data[i].option1 = order_status1;
+        data[i].option2 = order_status2;
+      } else {
+        if (data[i].status == order_status2) {
+          data[i].state = "danger";
+          data[i].option1 = order_status1;
+          data[i].option2 = order_status3;
+        } else {
+          if (data[i].status == order_status1) {
+            data[i].state = "success";
+            data[i].option1 = order_status2;
+            data[i].option2 = order_status3;
+          };
+        };
+      };
+    }
+    $scope.orders = data;
+  };
+
+  $scope.restore = function () {
+    $scope.getOrders();
+  };
+
+  $scope.changeStatus = function (order) {
+    console.log(order);
+    $scope.txtColor = 'primary';
+    if (order.status == "PROGRESSING") {
+      $scope.txtColor = 'primary';
+    } else {
+      if (order.status == "DONE") {
+        $scope.txtColor = 'success';
+      } else {
+        $scope.txtColor = 'danger';
+      }
+    }
+    $('#confirm_modal').modal('show');
+    $scope.confirm_order = order;
+  };
+
+  $scope.updateOrder = function (order) {
+
+    let stt = {
+      'delivery_note': order.delivery_note,
+      'phone': order.phone,
+      'email': order.email,
+      'status': order.status
+    };
+    console.log(stt);
+    $http.put(order_update_url + order._id, stt)
+      .then(function (data) {
+        console.log(data.data);
+      })
+      .then(function () {
+        $scope.getOrders();
+      })
+      .then(function () {
+        $('#confirm_modal').modal('hide');
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
+  $scope.showDetail = function (order) {
+    $scope.o = order;
+    $http.get(order_product_fromid_url + order.id_order_products)
+      .then(function (data) {
+        $scope.detail = data.data;
+      })
+      .catch(function (err) {
+        console.log(err);
+    })
+    $location.path("/order_detail");
+  };
   
 }]);
 
@@ -283,23 +395,152 @@ app.controller('UploadCtrl', ['$firebaseStorage', '$scope', '$timeout', 'sharedD
   };
 }]);
 
+app.controller('manage_productController', function ($scope, $http) {
+
+  const product_url = host + "allproducts";
+  const extra_url = host + "productextra%2Fgetproductextra";
+  const category_url = host + "category";
+  const subcategory_url = host + "subcategory";
+
+  $http.get(product_url)
+    .then(function (response) {
+      $scope.products = response.data;
+    })
+    .then(function (res) {
+      for (var i = 0; i < $scope.products.length; i++) {
+        $scope.products[i].category = [];
+        $scope.products[i].subcategory = [];
+      }
+      getExtraField();
+    })
+    .catch(function (e) {
+      $scope.data = e;
+    });
+
+  function getExtraField() {
+    $http.get(extra_url)
+      .then(function (res) {
+        $scope.extra = res.data;
+        getCategory();
+      })
+      .catch(function (e) {
+        console.log(e);
+      })
+  };
+
+  function getCategory() {
+    //Get product's category name.
+    $http.get(category_url)
+      .then(function (res) {
+        $scope.categories = res.data;
+      })
+      .then(function () {
+        getSubcategory();
+      })
+
+  }
+
+  function getSubcategory() {
+    //Get product's category name.
+    $http.get(subcategory_url)
+      .then(function (res) {
+        $scope.subcategories = res.data;
+      })
+      .then(function () {
+        addExtraField();
+      })
+  };
+  function isCategoryAvailable(category, c) {
+    for (var i = 0; i < category.length; i++) {
+      if (category[i].id == c) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  function isSubcategoryAvailable(subcategory, c) {
+    for (var i = 0; i < subcategory.length; i++) {
+      if (subcategory[i].id == c) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
+  function addExtraField() {
+    for (var i = 0; i < $scope.products.length; i++) {
+      for (var j = 0; j < $scope.extra.length; j++) {
+
+        let category_id = $scope.extra[j].category_id;
+        let subcategory_id = $scope.extra[j].subcategory_id;
+        let c;
+        let s;
+
+        if ($scope.products[i].id == $scope.extra[j].product_id) {
+
+          for (var y = 0; y < $scope.categories.length; y++) {
+            if (category_id == $scope.categories[y].id) {
+              c = {
+                "id": category_id,
+                "name": $scope.categories[y].name
+              };
+              if (!isCategoryAvailable($scope.products[i].category, category_id)) {
+                $scope.products[i].category.push(c);
+              }
+            } else {
+              c = "Not available";
+            }
+          };
+
+          for (var y = 0; y < $scope.subcategories.length; y++) {
+            if (subcategory_id == $scope.subcategories[y].id) {
+              s = {
+                "id": subcategory_id,
+                "name": $scope.subcategories[y].name
+              };
+              if (!isSubcategoryAvailable($scope.products[i].subcategory, subcategory_id)) {
+                $scope.products[i].subcategory.push(s);
+              }
+            } else {
+              s = "Not available";
+            }
+          };
+        }
+      }
+    }
+  }
+
+});
+
 app.config(function ($routeProvider) {
   $routeProvider
-    .when('/',{
-    templateUrl: 'login.html'
-  })
-  .when('/home', {
-    templateUrl: 'home.html',
-  })
-  .when('/add_product', {
-    templateUrl: 'action/add_product.html'
-  })
+    .when('/', {
+      templateUrl: 'login.html'
+    })
+    .when('/home', {
+      templateUrl: 'home.html',
+    })
+    .when('/add_product', {
+      templateUrl: 'action/add_product.html'
+    })
+    .when('/manage_product', {
+      templateUrl: 'action/manage_product.html'
+    })  
   .when('/add_category', {
     templateUrl: 'action/add_category.html'
   })
   .when('/add_subcategory', {
     templateUrl: 'action/add_subcategory.html'
   })
+  .when('/manage_order', {
+  templateUrl: 'action/manage_order.html'
+  })
+  .when('/order_detail', {
+    templateUrl: 'action/order_detail.html'
+  })  
   .otherwise({
     templateUrl: 'login.html'
   });
