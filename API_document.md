@@ -87,6 +87,12 @@ Localhost:
     - Yêu cầu bắt buộc phải có: **'order_id'**, **'product_id'**, **'product_name'**, **'product_price'**, **'product_quantity'**
       - Trong đó: **'order_id'** là **id** của **order**, một đơn hàng sẽ có một order_id vì vậy khi lưu order, chúng ta sẽ dùng order_id của order đó để lưu trong bảng Order_Product luôn.
 
+  #### Recommended APIs
+  Đây là những APIs sẽ trả về những items được khuyến nghị với 2 APIs chính:
+  a. ```url + recommended/getproducts```, API này sẽ trả về toàn bộ products được khuyến nghị.
+
+  b. ```url + recommended/getproductsbutnot + &id=<product_id>``` sẽ trả về những products trong khuyến nghị trừ product có ```id = <product_id>```
+
 ## 2. <u>Các APIs bất thường</u>
 
 - Để đăng nhập một user, sử dụng đường dẫn ``url + "login/create" + "&email=" + user.email + "&password=" + user.password`` ==> sẽ trả về 1 Object User nếu xác thực thành công.

@@ -1,7 +1,7 @@
 <div class="container-fluid" ng-controller="manage_productController">
     <h1 class="display-4">Manage Products</h1>
-    <table class="table table-bordered table-responsive table-hover table-dark">
-        <thead>
+    <table class="table table-bordered table-responsive table-hover table-default">
+        <thead style="text-align: center">
             <th>ID</th>
             <th>Name</th>
             <th>Price</th>
@@ -9,20 +9,34 @@
             <th>Subcategories</th>
             <th>Added on</th>
             <th>Available time</th>
+            <th>Action</th>
         </thead>
         <tbody>
-            <tr ng-repeat="p in products">
+            <tr ng-repeat="p in products | orderBy: created_at">
                 <td>{{p.id}}</td>
                 <td>{{p.name}}</td>
                 <td>{{p.price | currency}}</td>
                 <td>
-                    <p ng-repeat="c in p.category">{{c.name}}</p>
+                    <ul>
+                        <li ng-repeat="c in p.category">{{c.name}}</li>
+                    </ul>
+                    
                 </td>
                 <td>
-                    <p ng-repeat="c in p.subcategory">{{c.name}}</p>
+                    <ul>
+                        <li ng-repeat="c in p.subcategory">{{c.name}}</li>
+                    </ul>
                 </td>
                 <td>{{p.created_at}}</td>
-                <td>{{p.start_time}} to {{p.end_time}}</td>
+                <td>
+                    From 
+                    <a href="">{{p.available_start}}</a> 
+                    to 
+                    <a href="">{{p.available_end}}</a>
+                </td>
+                <td>
+                    <a href="" class="btn btn-primary"><span class="material-icons">edit</span></a>
+                </td>
             </tr>
         </tbody>
     </table>

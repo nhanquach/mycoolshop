@@ -101,7 +101,8 @@
     public function actionGetproducts(){
       $result = [];
 
-      $query = (new Query())->from('product');
+      $query = (new Query())->from('Product')
+      ->orderBy(['created_at' => SORT_DESC]);
       $provider = new ActiveDataProvider([
         'query' => $query,
       ]);
@@ -125,6 +126,7 @@
       }
 
       $query = (new Query())->from('Category');
+      
       $provider = new ActiveDataProvider([
         'query' => $query,
       ]);
@@ -135,7 +137,7 @@
         $categories_arr[$i] = (Object) $categories_arr[$i];
       }
 
-      $query = (new Query())->from('Subcategory');
+      $query = (new Query())->from('SubCategory');
       $provider = new ActiveDataProvider([
         'query' => $query,
       ]);
