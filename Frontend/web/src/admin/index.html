@@ -44,7 +44,7 @@
                             Admin home
                         </a>
                     </li>
-                    <li class="nav-item" ng-if="admin.username" =="admin" ">
+                    <li class="nav-item" ng-if="admin.username==admin">
                         <a class="nav-link" href="#!/home">
                             Summary
                         </a>
@@ -102,7 +102,7 @@
             </div>
         </nav>
 
-        <ng-view onload="" $autoscroll=""></ng-view>
+        <ng-view onload="" autoscroll></ng-view>
 
         <!-- in-page new Category Modal -->
         <div class="modal fade" id="CategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -18,11 +18,21 @@
   
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
+
+      <style>
+        .spanNav{
+          background: linear-gradient(white, gray);
+          color: white;
+          padding: 2px 5px;
+        }
+      </style>
 </head>
 
 <body ng-app="app" ng-controller="ApiController">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand display-4" href="#">MyCoolShop</a>
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top bg-light">
+    <a class="navbar-brand display-4" href="#">
+      <span class="spanNav">MyCoolShop</span>
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -42,6 +52,9 @@
             <span class="material-icons">shopping_cart</span>
             <span class="badge badge-secondary">{{cart_number}}</span>
           </a>
+        </li>
+        <li class="nav-item">
+          <input type="text" class="form-control mr-sm-2" placeholder="Search...">
         </li>
         <li class="nav-item">
           <a ng-if="!user_status" href="#!/login" class="nav-link">Log in/Sign up
@@ -73,7 +86,7 @@
     </div>
   </div>
 
-  <ng-view  onload=""  $autoscroll=""></ng-view>
+  <ng-view  onload="" autoscroll="true"></ng-view>
 
   <!-- Modal for more Info -->
 <div id="modal_cart" class="modal fade" tabindex="-1" role="dialog">

@@ -1,6 +1,6 @@
 <div class="container">
     <br/>
-    <a href="#!/manage_order" class="lead btn btn-info btn-sm"> <-- Back</a>
+    <a href="#!/manage_order" class="lead btn btn-info btn-sm">Back</a>
     <h1 class="display-4 text-{{o.state}}">Order #{{o.id_order_products}}</h1>
 
     <p class="lead">ID: #{{o.id_order_products}}</p>
@@ -20,6 +20,7 @@
             <th>Product name</th>
             <th>Quantity</th>
             <th>Price</th>
+            <th>View product</th>
         </thead>
         <tbody>
             <tr ng-repeat="d in detail">
@@ -27,6 +28,11 @@
                 <td>{{d.product_name}}</td>
                 <td>{{d.product_quantity}}</td>
                 <td>{{d.product_price|currency }}</td>
+                <td>
+                    <a href="../#!/product/{{d.product_id}}" class="btn btn-outline-info" target="_blank">
+                        View in new tab
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>

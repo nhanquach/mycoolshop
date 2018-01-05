@@ -129,7 +129,7 @@ app.controller('SignupController', ['$scope', '$http', '$localStorage', '$timeou
 
 }]);
 
-app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage', '$timeout', 'user_service', function ($scope, $http, $location, $localStorage, $timeout, user_service) {
+app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage', '$timeout', 'user_service', '$routeParams', function ($scope, $http, $location, $localStorage, $timeout, user_service, $routeParams) {
 
   $scope.user_status;
 
@@ -203,9 +203,22 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
    * @param {product} p
    */
   $scope.moreInfo = function (p) {
-    $scope.productInfo = p;
-    $location.path('product')
+    $location.path('product/' + p.id);
   };
+
+  $scope.getProductById = function () {
+    let id = $routeParams.ID;
+    let url = host + "allproducts/getproductby&id=";
+    console.log(url + id);
+    $http.get(url + id)
+      .then((value) => {
+        $scope.productInfo = value.data[0];
+        $scope.getRecommendedItems(5);
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+  }
 
   function createRandomQuantity() {
     var n = Math.ceil(Math.random() * 30);
@@ -220,6 +233,18 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
   };
 
   createRandomQuantity();
+
+  //Get Recommended Items
+  $scope.getRecommendedItems = function (limit) {
+    let url = host + "recommended/getproductbylimit&id=" + $scope.productInfo.id + "&limit=" + limit;
+    console.log(url);
+    
+    $http.get(url)
+      .then((value) => {
+        $scope.rec_items = value.data;
+      })
+      .catch((err) => console.log(err));
+  };
 
   /**
    * Cart section
@@ -470,7 +495,7 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
 
 app.config(function ($routeProvider) {
   $routeProvider
-    .when('/product',{
+    .when('/product/:ID',{
     templateUrl: 'product_view.html'
   })
   .when('/login',{
