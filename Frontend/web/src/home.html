@@ -11,10 +11,10 @@
   </div>
   <div class="row">
     <div class="card-columns">
-        <div class="card text-center" ng-click="moreInfo(d)" ng-repeat="d in products">
-          <img ng-src="{{d.image}}" alt="" class="card-img-top">
-          <div class="card-body">
-            <h3 class="card-title lead">{{d.name}}</h3>
+        <div class="card text-center" ng-repeat="d in products">
+          <img ng-src="{{d.image}}" alt="" class="card-img-top" ng-click="moreInfo(d)">
+          <div class="card-body" >
+            <h3 class="card-title lead" ng-click="moreInfo(d)">{{d.name}}</h3>
             <p class="card-text">{{d.price|currency}}</p>
             <a class="btn btn-outline-info" ng-click="moreInfo(d)">See more</a>
             <a class="btn btn-outline-primary" ng-click="addToCart(d, 1)">Add to cart</a>

@@ -2,12 +2,13 @@
 Use localhost to development, because 000webhostapp limit the node.
 */
 const and = "%2F";
-const host = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
+//const host = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
 
-/**
- * //Uncomment this to use the 000webhostapp as host.
- * const host = "https://mycoolshop.000webhostapp.com/web/index.php?r=";
- */
+const host = "http://192.168.11.106/shop/mycoolshop/Backend/myshop/web/index.php?r=";
+
+//Uncomment this to use the 000webhostapp as host. 
+//const host = "https://mycoolshop.000webhostapp.com/web/index.php?r=";
+
 
 //URL for getting data
 const product_url = host + "allproducts/getproducts";
@@ -26,7 +27,6 @@ const product_update_url = host + "allproducts/update&id=";
 const category_post_url = host + "category/create"
 const subcategory_post_url = host + "subcategory/create";
 const extra_post_url = host + "productextra/create"
-//http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=order/update&id_order_products=054915212
 const order_update_url = host + "order/update&id=";
 
 //Login URL
@@ -34,14 +34,6 @@ const user_login_url = host + "login" + and + "create";
 
 const order_post_url = host + "order/create"
 const orderproducts_post_url = host + "orderproducts/create"
-
-
-//const product_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts";
-//const product_post_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts/create";
-//const extra_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=productextra";
-//const category_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=category";
-//const subcategory_url = "https://mycoolshop.000webhostapp.com/web/index.php?r=subcategory";
-
 
 var app = angular.module('admin-app', ['ngRoute', 'ngStorage', 'firebase', 'ui.bootstrap', 'ui.bootstrap.datetimepicker']);
 
@@ -248,6 +240,7 @@ app.controller('AdminController', ['$scope', '$http', '$location', '$localStorag
       ).catch(function (e) {
         $scope.message = "Data validation failed."
         $scope.type = "alert-warning";
+        console.log(e);
       });
   }
   
@@ -415,6 +408,7 @@ app.controller('manage_productController', function ($scope, $http, $location, $
 
   $scope.e_product;
   $scope.products;
+  const host = "http://192.168.11.106/shop/mycoolshop/Backend/myshop/web/index.php?r=";
   //const product_url = host + "allproducts/getproducts";
   const getProductById_url = host + "allproducts/getproductby&id=";
 
@@ -442,7 +436,9 @@ app.controller('manage_productController', function ($scope, $http, $location, $
 
   $scope.getProductById = function () {
     let ID = $routeParams.ID;
-    console.log(getProductById_url + ID);
+    const host = "http://192.168.11.106/shop/mycoolshop/Backend/myshop/web/index.php?r=";
+    const getProductById_url = host + "allproducts/getproductby&id=";
+    
     $http.get(getProductById_url + ID)
       .then((value) => {
         $scope.product = value.data[0];
@@ -505,6 +501,7 @@ app.controller('manage_productController', function ($scope, $http, $location, $
     if (new_image_url != "" && new_image_url != null) {
       new_product.image = new_image_url;
     };
+    console.log(product_update_url);
     $http.put(product_update_url + new_product.id, new_product)
       .then((value) => {
         console.log(value.data);

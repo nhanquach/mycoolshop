@@ -23,7 +23,7 @@
        $limit = 5;
      }
 
-      $query = (new Query())->from('product')->where(['!= ', 'id', $id])->limit($limit);
+      $query = (new Query())->from('Product')->where(['!= ', 'id', $id])->limit($limit);
       $provider = new ActiveDataProvider([
         'query' => $query,
       ]);
@@ -57,7 +57,7 @@
         $categories_arr[$i] = (Object) $categories_arr[$i];
       }
 
-      $query = (new Query())->from('Subcategory');
+      $query = (new Query())->from('SubCategory');
       $provider = new ActiveDataProvider([
         'query' => $query,
       ]);

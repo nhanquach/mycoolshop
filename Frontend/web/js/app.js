@@ -3,8 +3,10 @@ Use localhost to development, because 000webhostapp limit the node.
 */
 const host = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
 
+//const host = "http://192.168.11.106/shop/mycoolshop/Backend/myshop/web/index.php?r=";
 
- // //Uncomment this to use the 000webhostapp as host.
+
+// //Uncomment this to use the 000webhostapp as host.
 // const host = "https://mycoolshop.000webhostapp.com/web/index.php?r=";
  
 
@@ -367,6 +369,7 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
   $scope.placeOrder = function (order, items) {
     order.price = $scope.cart_money;
     $scope.order._id = null;
+    
     $http.post(order_post_url, $scope.order)
       .then(function (data) {
         console.log(data.data);
@@ -389,6 +392,7 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
         };
       })
       .catch(function (err) {
+        console.log("ERR----")
         console.log(err);
       });
   };
