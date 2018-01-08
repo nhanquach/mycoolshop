@@ -6,8 +6,17 @@
     <div class="col-md-6 col-sm-12">
       <h1 class="display-4">{{productInfo.name}}</h1>
       <h4 class="lead">{{productInfo.price | currency}}</h4>
-      <select class="form-control" name="" ng-model="r" ng-options="qu.value as qu.name for qu in rq">
-        <option value="0" selected="selected">Choose a quantity</option>
+      <select class="form-control" name="" ng-model="r" style="text-align-last:center;"><!--ng-options="qu.value as qu.name for qu in rq"-->
+        <option value="1" select="selected">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="7">7</option>
+		<option value="8">8</option>
+		<option value="9">9</option>
+		<option value="10">10</option>
       </select>
 
       <br/>
@@ -42,7 +51,7 @@
       <div class="card text-center" ng-repeat="item in rec_items" ng-click="moreInfo(item);" style="cursor:pointer;">
         <img ng-src="{{item.image}}" alt="" class="card-img-top" max-height= "350px">
         <div class="card-body">
-          <h3 class="card-title">{{item.name}}</h3>
+          <h4 style="font-weight:normal;font-size:18px">{{item.name}}</h4>
           <div class="card-text lead">{{item.price|currency}}</div>
           <a class="btn btn-outline-info" ng-click="moreInfo(item)">See more</a>
           <a class="btn btn-outline-primary" ng-click="addToCart(item, 1)">Add to cart</a>
