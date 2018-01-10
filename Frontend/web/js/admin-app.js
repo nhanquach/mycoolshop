@@ -2,9 +2,9 @@
 Use localhost to development, because 000webhostapp limit the node.
 */
 const and = "%2F";
-//const host = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
+const host = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
 
-const host = "http://192.168.11.106/shop/mycoolshop/Backend/myshop/web/index.php?r=";
+//const host = "http://192.168.11.106/shop/mycoolshop/Backend/myshop/web/index.php?r=";
 
 //Uncomment this to use the 000webhostapp as host. 
 //const host = "https://mycoolshop.000webhostapp.com/web/index.php?r=";
@@ -408,8 +408,8 @@ app.controller('manage_productController', function ($scope, $http, $location, $
 
   $scope.e_product;
   $scope.products;
-  const host = "http://192.168.11.106/shop/mycoolshop/Backend/myshop/web/index.php?r=";
-  //const product_url = host + "allproducts/getproducts";
+  const host = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
+  const product_url = host + "allproducts/getproducts";
   const getProductById_url = host + "allproducts/getproductby&id=";
 
   $http.get(product_url)
@@ -436,7 +436,7 @@ app.controller('manage_productController', function ($scope, $http, $location, $
 
   $scope.getProductById = function () {
     let ID = $routeParams.ID;
-    const host = "http://192.168.11.106/shop/mycoolshop/Backend/myshop/web/index.php?r=";
+    const host = "http://localhost/shop/mycoolshop/Backend/myshop/web/index.php?r=";
     const getProductById_url = host + "allproducts/getproductby&id=";
     
     $http.get(getProductById_url + ID)
