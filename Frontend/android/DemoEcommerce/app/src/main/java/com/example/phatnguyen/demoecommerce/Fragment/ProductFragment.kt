@@ -27,8 +27,10 @@ import kotlinx.android.synthetic.main.product_fragment_layout.*
 import android.widget.EditText
 import com.example.phatnguyen.demoecommerce.CustomView.DynamicValueTextView
 import android.app.Activity
-
-
+import com.example.phatnguyen.demoecommerce.DataModel.CartDataModel
+import org.jetbrains.anko.db.MapRowParser
+import org.jetbrains.anko.db.parseList
+import org.jetbrains.anko.db.select
 
 
 /**
@@ -145,22 +147,49 @@ class ProductFragment : Fragment() {
                                 override fun onButtonClick(position: Int) {
                                     Log.d(TAG, "Add" + position + " " + productList!![position].id + " " + "to cart")
                                     //Add cart here
-                                    var dt: DynamicValueTextView
+                                    var didParseRow : Boolean = false
+                                    var dt: DynamicValueTextView = productListView.getChildAt(position).findViewById(R.id.text_view) as DynamicValueTextView
                                     val db = context.database.writableDatabase
                                     val values = ContentValues()
-                                    values.put(CartDatabaseAPI.PRODUCT_ID, productList!![position].id)
-                                    values.put(CartDatabaseAPI.PRODUCT_IMAGE, productList!![position].image)
-                                    values.put(CartDatabaseAPI.PRODUCT_NAME, productList!![position].name)
-                                    values.put(CartDatabaseAPI.PRODUCT_PRICE, productList!![position].price)
-                                    values.put(CartDatabaseAPI.SELLER_NAME, productList!![position].seller)
-                                    dt = productListView.getChildAt(position).findViewById(R.id.text_view) as DynamicValueTextView
-                                    if (dt != null) {
-                                        values.put(CartDatabaseAPI.TOTAL_AMOUNT, dt.getValues())
+                                    //Check if record is already existed we'll update quantity value, if not we'll insert new record
+                                    db.select(CartDatabaseAPI.TABLE_NAME).exec {
+                                        parseList(object : MapRowParser<Map<String, Any?>> {
+                                            override fun parseRow(columns: Map<String, Any?>): Map<String, Any?> {
+                                                Log.e("Your result", columns.toString())
+                                                if (productList!![position].id == (columns[CartDatabaseAPI.PRODUCT_ID] as Long).toInt()) {
+                                                    val oldQuantity = (columns[CartDatabaseAPI.TOTAL_AMOUNT] as Long).toInt()
+                                                    if (dt != null) {
+                                                        val currQuantity = dt.getValues()
+                                                        val newQuantity = currQuantity + oldQuantity
+                                                        val updateValues = ContentValues()
+                                                        updateValues.put(CartDatabaseAPI.TOTAL_AMOUNT, newQuantity)
+                                                        updateValues.put(CartDatabaseAPI.TOTAL_MONEY, newQuantity * productList!![position].price)
+                                                        db.update(CartDatabaseAPI.TABLE_NAME, updateValues, CartDatabaseAPI.PRODUCT_ID + "=" + productList!![position].id.toString(), null)
+                                                        Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show()
+                                                        didParseRow = true
+                                                    }
+                                                }
+                                                return columns
+                                            }
+                                        }
+                                        )
                                     }
-                                    values.put(CartDatabaseAPI.TOTAL_MONEY, productList!![position].price)
-                                    values.put(CartDatabaseAPI.CREATED_TIME, System.currentTimeMillis().toString())
-                                    db.insert(CartDatabaseAPI.TABLE_NAME, null, values)
-                                    Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show()
+                                    if (didParseRow == false) {
+                                        values.put(CartDatabaseAPI.PRODUCT_ID, productList!![position].id)
+                                        values.put(CartDatabaseAPI.PRODUCT_IMAGE, productList!![position].image)
+                                        values.put(CartDatabaseAPI.PRODUCT_NAME, productList!![position].name)
+                                        values.put(CartDatabaseAPI.PRODUCT_PRICE, productList!![position].price)
+                                        values.put(CartDatabaseAPI.SELLER_NAME, productList!![position].seller)
+                                        if (dt != null) {
+                                            values.put(CartDatabaseAPI.TOTAL_AMOUNT, dt.getValues())
+                                        }
+                                        values.put(CartDatabaseAPI.TOTAL_MONEY, productList!![position].price)
+                                        values.put(CartDatabaseAPI.CREATED_TIME, System.currentTimeMillis().toString())
+                                        db.insert(CartDatabaseAPI.TABLE_NAME, null, values)
+                                        db.close()
+                                        Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show()
+                                    }
+                                    db.close()
                                 }
                             })
                     adapter.notifyDataSetChanged()

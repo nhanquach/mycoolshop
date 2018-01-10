@@ -19,6 +19,7 @@ import com.example.phatnguyen.demoecommerce.Utils.ProgressDialogUtils
 import info.hoang8f.widget.FButton
 import android.widget.TextView
 import com.example.phatnguyen.demoecommerce.Activity.ManageOrdersActivity
+import com.example.phatnguyen.demoecommerce.Database.database
 
 
 /**
@@ -45,7 +46,9 @@ class ProfileFragment : Fragment() {
         activity.title = "Profile"
         val manageOrdersBtn = rootView?.findViewById(R.id.manageOrdersBtn) as FButton
         val userName = rootView?.findViewById(R.id.user_profile_name) as TextView
-        userName.text = DefaultSettings.sharedInstance.getDefaults(UserSettings.name(),context)
+        val userType = rootView?.findViewById(R.id.user_profile_type) as TextView
+        userName.text = "Name: " + DefaultSettings.sharedInstance.getDefaults(UserSettings.name(),context)
+        userType.text = "Type: " + DefaultSettings.sharedInstance.getDefaults(UserSettings.type(),context)
         if (DefaultSettings.sharedInstance.getDefaults(UserSettings.type(),context) == "user") {
             manageOrdersBtn.visibility = View.GONE
         }
@@ -86,7 +89,9 @@ class ProfileFragment : Fragment() {
             R.id.action_signout -> {
 //                FirebaseAuth.getInstance().signOut()
                 DefaultSettings.sharedInstance.setDefaults(UserSettings.isLogged(),"0",context)
-                ProgressDialogUtils.sharedInstance.hideProgressDialog()
+                val db = context.database.writableDatabase
+                db.close()
+//                ProgressDialogUtils.sharedInstance.hideProgressDialog()
                 val loginIntent = Intent(activity, LoginActivity::class.java)
                 loginIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(loginIntent)

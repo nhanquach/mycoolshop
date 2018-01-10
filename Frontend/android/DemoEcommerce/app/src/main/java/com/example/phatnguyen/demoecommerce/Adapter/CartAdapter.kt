@@ -70,9 +70,9 @@ class CartAdapter() : BaseAdapter() {
                 .error(R.drawable.rect_error)
                 .into(item.ProductImageView)
 
-        item.ProductTitle!!.text = currentProduct?.productName
-        item.PriceTextView!!.text = currentProduct?.productPrice.toString()
-        item.SellerTextView!!.text = currentProduct?.sellerName
+        item.ProductTitle!!.text = "Product: " + currentProduct?.productName
+        item.PriceTextView!!.text = "Price: " + currentProduct?.totalMoney.toString()
+        item.SellerTextView!!.text = "User: " + currentProduct?.sellerName
         item.TotalAmount!!.setValues(currentProduct?.totalAmount)
         item.DeleteButton!!.tag = position
         item.DeleteButton!!.setOnClickListener { v ->
