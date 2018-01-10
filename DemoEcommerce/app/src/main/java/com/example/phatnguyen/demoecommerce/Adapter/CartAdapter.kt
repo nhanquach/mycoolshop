@@ -8,6 +8,8 @@ import android.widget.BaseAdapter
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.phatnguyen.demoecommerce.CustomView.DynamicValueTextView
+import com.example.phatnguyen.demoecommerce.DataModel.CartDataModel
 import com.example.phatnguyen.demoecommerce.DataModel.ProductDataModel
 import com.example.phatnguyen.demoecommerce.R
 import com.squareup.picasso.Picasso
@@ -17,10 +19,10 @@ import java.util.ArrayList
  * Created by phatnguyen on 11/26/17.
  */
 class CartAdapter() : BaseAdapter() {
-    private var mCartProductList: List<ProductDataModel>? = null
+    private var mCartProductList: ArrayList<CartDataModel>? = null
     private var mdeleteClickListener: ProductListAdapter.ButtonClickListener? = null
     private var mContext: Context? = null
-    constructor(CartProductList: ArrayList<ProductDataModel>, mContext: Context, mdeleteClickListener: ProductListAdapter.ButtonClickListener): this() {
+    constructor(CartProductList: ArrayList<CartDataModel>, mContext: Context, mdeleteClickListener: ProductListAdapter.ButtonClickListener): this() {
         mCartProductList = CartProductList
         this.mContext = mContext
         this.mdeleteClickListener = mdeleteClickListener
@@ -30,7 +32,7 @@ class CartAdapter() : BaseAdapter() {
         return mCartProductList?.size!!
     }
 
-    override fun getItem(position: Int): ProductDataModel {
+    override fun getItem(position: Int): CartDataModel {
         return mCartProductList?.get(position)!!
     }
 
@@ -51,6 +53,7 @@ class CartAdapter() : BaseAdapter() {
             item.PriceTextView = convertView.findViewById(R.id.productprice) as TextView
             item.SellerTextView = convertView.findViewById(R.id.sellername) as TextView
             item.DeleteButton = convertView.findViewById(R.id.DeleteButton) as ImageButton
+            item.TotalAmount = convertView.findViewById(R.id.text_view) as DynamicValueTextView
 
             convertView.tag = item
         } else {
@@ -61,17 +64,17 @@ class CartAdapter() : BaseAdapter() {
 
         Picasso.with(mContext).setIndicatorsEnabled(false)
         Picasso.with(mContext)
-                .load(currentProduct?.image)
+                .load(currentProduct?.productImage!!)
                 .resize(200, 200)
                 .placeholder(R.drawable.ic_launcher)
                 .error(R.drawable.rect_error)
                 .into(item.ProductImageView)
 
-        item.ProductTitle!!.text = currentProduct?.name
-        item.PriceTextView!!.text = currentProduct?.price.toString()
-        item.SellerTextView!!.text = currentProduct?.seller
+        item.ProductTitle!!.text = currentProduct?.productName
+        item.PriceTextView!!.text = currentProduct?.productPrice.toString()
+        item.SellerTextView!!.text = currentProduct?.sellerName
+        item.TotalAmount!!.setValues(currentProduct?.totalAmount)
         item.DeleteButton!!.tag = position
-
         item.DeleteButton!!.setOnClickListener { v ->
             if (mdeleteClickListener != null)
                 mdeleteClickListener!!.onButtonClick(v.tag as Int)
@@ -85,5 +88,6 @@ class CartAdapter() : BaseAdapter() {
         internal var PriceTextView: TextView? = null
         internal var SellerTextView: TextView? = null
         internal var DeleteButton: ImageButton? = null
+        internal var TotalAmount: DynamicValueTextView? = null
     }
 }

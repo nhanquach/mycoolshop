@@ -20,8 +20,20 @@ class DefaultSettings {
         editor.apply()
     }
 
+    fun setIntDefaults(key: String, value: Int, context: Context) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = prefs.edit()
+        editor.putInt(key, value)
+        editor.apply()
+    }
+
     fun getDefaults(key: String, context: Context): String {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         return preferences.getString(key, "")
+    }
+
+    fun getIntDefaults(key: String,context: Context): Int {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        return preferences.getInt(key,0)
     }
 }

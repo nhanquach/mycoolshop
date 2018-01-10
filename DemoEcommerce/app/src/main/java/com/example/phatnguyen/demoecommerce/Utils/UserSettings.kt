@@ -12,6 +12,10 @@ class UserSettings {
 
         }
 
+        fun id(): String {
+            return "id"
+        }
+
         fun type(): String {
             return "type"
         }

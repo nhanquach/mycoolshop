@@ -74,6 +74,14 @@
                     android:fontFamily="sans-serif"
                     android:focusable="false"
                     />
+
+                <com.example.phatnguyen.demoecommerce.CustomView.DynamicValueTextView
+                    android:id="@+id/text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"/>
+
+
             </LinearLayout>
 
             <ImageButton

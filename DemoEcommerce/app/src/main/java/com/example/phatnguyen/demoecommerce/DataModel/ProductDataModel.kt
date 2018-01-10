@@ -12,7 +12,7 @@ import java.util.*
 class ProductDataModel {
     @SerializedName("id") val id: Int = 0
     @SerializedName("name") var name: String? = null
-    @SerializedName("price") var price: Int = 0
+    @SerializedName("price") var price: Float = 0.toFloat()
     @SerializedName("description") var description: String? = null
     @SerializedName("created_at") var created_at: String ? = null
     @SerializedName("seller") var seller: String? = null

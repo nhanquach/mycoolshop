@@ -9,16 +9,12 @@ import android.support.v7.widget.AppCompatButton
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.view.Window
 import android.widget.EditText
 import android.widget.Toast
 import com.example.phatnguyen.demoecommerce.DataModel.UserDataModel
 import com.example.phatnguyen.demoecommerce.R
 import com.example.phatnguyen.demoecommerce.R.id.*
-import com.example.phatnguyen.demoecommerce.Utils.DefaultSettings
-import com.example.phatnguyen.demoecommerce.Utils.NetworkUtils
-import com.example.phatnguyen.demoecommerce.Utils.ProgressDialogUtils
-import com.example.phatnguyen.demoecommerce.Utils.UserSettings
+import com.example.phatnguyen.demoecommerce.Utils.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 
@@ -83,7 +79,7 @@ class LoginActivity: AppCompatActivity(), View.OnClickListener {
         val loginThread = Thread({
             Log.d(TAG, "runThread(): ${Thread.currentThread().name}")
 
-            val json = NetworkUtils.Companion.sharedInstance.readUrl("https://mycoolshop.000webhostapp.com/web/index.php?r=login")
+            val json = NetworkUtils.Companion.sharedInstance.readUrl(Constant.SERVER_URL + "login")
             val user = Gson().fromJson(json, Array<UserDataModel>::class.java)
 
             for (item in user) {
@@ -92,6 +88,7 @@ class LoginActivity: AppCompatActivity(), View.OnClickListener {
                         DefaultSettings.sharedInstance.setDefaults(UserSettings.type(),item.userType.toString(),applicationContext)
                         DefaultSettings.sharedInstance.setDefaults(UserSettings.name(),item.username.toString(),applicationContext)
                         DefaultSettings.sharedInstance.setDefaults(UserSettings.isLogged(),"1",applicationContext)
+                        DefaultSettings.sharedInstance.setIntDefaults(UserSettings.id(),item._id,applicationContext)
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                 }

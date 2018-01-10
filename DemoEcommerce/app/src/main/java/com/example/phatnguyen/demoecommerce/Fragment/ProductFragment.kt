@@ -13,12 +13,20 @@ import com.example.phatnguyen.demoecommerce.R
 import kotlin.collections.ArrayList
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.ContentValues
 import android.widget.*
 import com.example.phatnguyen.demoecommerce.DataModel.CategoryDataModel
 import com.example.phatnguyen.demoecommerce.DataModel.SubCategoryDataModel
+import com.example.phatnguyen.demoecommerce.Database.CartDatabaseAPI
+import com.example.phatnguyen.demoecommerce.Database.database
+import com.example.phatnguyen.demoecommerce.Utils.Constant
 import com.example.phatnguyen.demoecommerce.Utils.NetworkUtils
 import com.example.phatnguyen.demoecommerce.Utils.ProgressDialogUtils
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.product_fragment_layout.*
+import android.widget.EditText
+import com.example.phatnguyen.demoecommerce.CustomView.DynamicValueTextView
+import android.app.Activity
 
 
 
@@ -43,14 +51,9 @@ class ProductFragment : Fragment() {
     @SuppressLint("ResourceType")
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater?.inflate(R.layout.product_fragment_layout, container, false)
-        val randomThread = Thread({
-            activity.runOnUiThread {
-                ProgressDialogUtils.sharedInstance.showProgressDialog(activity,"Loading ...")
-            }
-
-        })
-        randomThread.start()
-
+//        if (!((context as Activity).isFinishing)) {
+//            ProgressDialogUtils.sharedInstance.showProgressDialog(activity, "Loading ...")
+//        }
         activity.title = "Home"
         productList = ArrayList<ProductDataModel>()
         cateItems = ArrayList<String>()
@@ -68,19 +71,25 @@ class ProductFragment : Fragment() {
         val loadCategoryData = Thread({
             Log.d(TAG, "runThread(): ${Thread.currentThread().name}")
 
-            val json = NetworkUtils.Companion.sharedInstance.readUrl("https://mycoolshop.000webhostapp.com/web/index.php?r=category")
+            val json = NetworkUtils.Companion.sharedInstance.readUrl(Constant.SERVER_URL + "category")
             val category = Gson().fromJson(json, Array<CategoryDataModel>::class.java)
 
             for (item in category) {
                 cateItems!!.add(item.name.toString())
             }
+            //prevent from crashin
+            if (activity == null) {
+                return@Thread
+            }
 
-            activity.runOnUiThread {
-                Log.i(TAG, "runOnUiThread")
-                val categoryAdapter = ArrayAdapter<String>(context,
-                        R.layout.spinner_item, cateItems)
-                categoryAdapter.notifyDataSetChanged()
-                categorySpinner.adapter = categoryAdapter
+            if (cateItems!!.size > 0) {
+                activity.runOnUiThread {
+                    Log.i(TAG, "runOnUiThread")
+                    val categoryAdapter = ArrayAdapter<String>(context,
+                            R.layout.spinner_item, cateItems)
+                    categoryAdapter.notifyDataSetChanged()
+                    categorySpinner.adapter = categoryAdapter
+                }
             }
          })
 
@@ -89,19 +98,25 @@ class ProductFragment : Fragment() {
         val loadSubCategoryData = Thread({
             Log.d(TAG, "runThread(): ${Thread.currentThread().name}")
 
-            val json = NetworkUtils.Companion.sharedInstance.readUrl("https://mycoolshop.000webhostapp.com/web/index.php?r=subcategory")
+            val json = NetworkUtils.Companion.sharedInstance.readUrl(Constant.SERVER_URL + "subcategory")
             val subCategory = Gson().fromJson(json, Array<SubCategoryDataModel>::class.java)
 
             for (item in subCategory) {
                 subCateItems!!.add(item.name.toString())
             }
 
-            activity.runOnUiThread {
-                Log.i(TAG, "runOnUiThread")
-                val subCategoryAdapter = ArrayAdapter<String>(context,
-                        R.layout.spinner_item, subCateItems)
-                subCategoryAdapter.notifyDataSetChanged()
-                subCategorySpinner.adapter = subCategoryAdapter
+            if (activity == null) {
+                return@Thread
+            }
+
+            if (subCateItems!!.size > 0) {
+                activity.runOnUiThread {
+                    Log.i(TAG, "runOnUiThread")
+                    val subCategoryAdapter = ArrayAdapter<String>(context,
+                            R.layout.spinner_item, subCateItems)
+                    subCategoryAdapter.notifyDataSetChanged()
+                    subCategorySpinner.adapter = subCategoryAdapter
+                }
             }
         })
 
@@ -109,38 +124,52 @@ class ProductFragment : Fragment() {
         val loadProductData = Thread({
             Log.d(TAG, "runThread(): ${Thread.currentThread().name}")
 
-            val json = NetworkUtils.Companion.sharedInstance.readUrl("https://mycoolshop.000webhostapp.com/web/index.php?r=allproducts")
+            val json = NetworkUtils.Companion.sharedInstance.readUrl(Constant.SERVER_URL + "allproducts")
             val product = Gson().fromJson(json, Array<ProductDataModel>::class.java)
 
             for (item in product) {
                 productList!!.add(item)
             }
 
-            activity.runOnUiThread {
-                Log.i(TAG, "runOnUiThread")
-                val adapter = ProductListAdapter(context, productList,
-                        activity.windowManager.defaultDisplay.width,
-                        object : ProductListAdapter.ButtonClickListener {
-                            override fun onButtonClick(position: Int) {
-                                Log.d(TAG,"Insert" + position + " " + productList!![position].id + " " + "to adapter")
-//                val intentProduct = ProductDataModel(productList!![position].productType,
-//                        productList!![position].category,
-//                        productList!![position].productImage,
-//                        productList!![position].getprice(),
-//                        productList!![position].seller,
-//                        productList!![position]._id,
-//                        productList!![position].productName,
-//                        productList!![position].updateTime)
-//                System.out.println("INTENT PRODUCT PRODUCT ID" + intentProduct._id.toString())
-//                cartButtonClick(position, view, productList!!, productDisplayRef)
-                                //                                val sellerDetailIntent = Intent(activity, ProductDetailActivity::class.java)
-                                //                                sellerDetailIntent.putExtra("IntentProduct", intentProduct)
-                                //                                activity.startActivity(sellerDetailIntent)
-                            }
-                        })
-                adapter.notifyDataSetChanged()
-                productListView.adapter = adapter
-                ProgressDialogUtils.sharedInstance.hideProgressDialog()
+            if (activity == null) {
+                return@Thread
+            }
+
+            if (productList!!.size > 0) {
+                activity.runOnUiThread {
+                    Log.i(TAG, "runOnUiThread")
+                    val adapter = ProductListAdapter(context, productList,
+                            activity.windowManager.defaultDisplay.width,
+                            object : ProductListAdapter.ButtonClickListener {
+                                @SuppressLint("ShowToast")
+                                override fun onButtonClick(position: Int) {
+                                    Log.d(TAG, "Add" + position + " " + productList!![position].id + " " + "to cart")
+                                    //Add cart here
+                                    var dt: DynamicValueTextView
+                                    val db = context.database.writableDatabase
+                                    val values = ContentValues()
+                                    values.put(CartDatabaseAPI.PRODUCT_ID, productList!![position].id)
+                                    values.put(CartDatabaseAPI.PRODUCT_IMAGE, productList!![position].image)
+                                    values.put(CartDatabaseAPI.PRODUCT_NAME, productList!![position].name)
+                                    values.put(CartDatabaseAPI.PRODUCT_PRICE, productList!![position].price)
+                                    values.put(CartDatabaseAPI.SELLER_NAME, productList!![position].seller)
+                                    dt = productListView.getChildAt(position).findViewById(R.id.text_view) as DynamicValueTextView
+                                    if (dt != null) {
+                                        values.put(CartDatabaseAPI.TOTAL_AMOUNT, dt.getValues())
+                                    }
+                                    values.put(CartDatabaseAPI.TOTAL_MONEY, productList!![position].price)
+                                    values.put(CartDatabaseAPI.CREATED_TIME, System.currentTimeMillis().toString())
+                                    db.insert(CartDatabaseAPI.TABLE_NAME, null, values)
+                                    Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show()
+                                }
+                            })
+                    adapter.notifyDataSetChanged()
+                    productListView.adapter = adapter
+//                    ProgressDialogUtils.sharedInstance.hideProgressDialog()
+                }
+            }
+            else {
+//                ProgressDialogUtils.sharedInstance.hideProgressDialog()
             }
         })
 

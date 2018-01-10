@@ -2,39 +2,40 @@ package com.example.phatnguyen.demoecommerce.Fragment
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import android.widget.TextView
-import android.widget.Toast
+import com.example.phatnguyen.demoecommerce.Activity.CheckOutActivity
 import com.example.phatnguyen.demoecommerce.Adapter.CartAdapter
 import com.example.phatnguyen.demoecommerce.Adapter.ProductListAdapter
-import com.example.phatnguyen.demoecommerce.DataModel.ProductDataModel
+import com.example.phatnguyen.demoecommerce.DataModel.CartDataModel
+import com.example.phatnguyen.demoecommerce.Database.CartDatabaseAPI
+import com.example.phatnguyen.demoecommerce.Database.database
 import com.example.phatnguyen.demoecommerce.R
 import com.example.phatnguyen.demoecommerce.Utils.ProgressDialogUtils
-import com.firebase.client.DataSnapshot
-import com.firebase.client.Firebase
-import com.firebase.client.FirebaseError
-import com.firebase.client.ValueEventListener
 import com.malinskiy.materialicons.IconDrawable
 import com.malinskiy.materialicons.Iconify
 import com.vlonjatg.progressactivity.ProgressFrameLayout
-import kotlinx.android.synthetic.main.cart_fragment_layout.*
+import info.hoang8f.widget.FButton
+import org.jetbrains.anko.db.MapRowParser
+import org.jetbrains.anko.db.parseList
+import org.jetbrains.anko.db.select
+import java.io.Serializable
 import java.util.ArrayList
 
 /**
  * Created by phatnguyen on 11/11/17.
  */
-class CartFragment: Fragment() {
+class CartFragment: Fragment(),Serializable {
     private  val TAG = "CartFragment"
-//    private var cartProductList: ArrayList<ProductDataModel>? = null
+    private var cartProductList: ArrayList<CartDataModel>? = null
 //    private var productID: ArrayList<String>? = null
-//    internal var adapter: CartAdapter? = null
+    internal var adapter: CartAdapter? = null
 //    private var totalPrice: Int? = 0
 //    private  val cartRef = Firebase("https://ecommerce-demo-7f6de.firebaseio.com/Carts")
     private var listener: OnFragmentInteractionListener? = null
@@ -53,18 +54,78 @@ class CartFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView =  inflater!!.inflate(R.layout.cart_fragment_layout, container, false)
         activity.title = "Cart"
-        progressRelativeLayout = rootView?.findViewById(R.id.progress) as ProgressFrameLayout
-        val emptyDrawable = IconDrawable(context, Iconify.IconValue.zmdi_shopping_cart)
-                .colorRes(android.R.color.darker_gray)
-        progressRelativeLayout.showEmpty(emptyDrawable,
-                "Empty Cart",
-                "There are no content to view now.")
-//        val cartlistView = rootView?.findViewById(R.id.cartlistView) as ListView
-//        val CheckoutButton = rootView?.findViewById(R.id.Checkoutbutton) as info.hoang8f.widget.FButton
-//        cartProductList = ArrayList()
-//        productID = ArrayList()
 //        ProgressDialogUtils.sharedInstance.showProgressDialogWithStyle(activity,"LOADING CART", ProgressDialog.STYLE_SPINNER)
-//        loadAdapter()
+        val cartlistView = rootView?.findViewById(R.id.cartlistView) as ListView
+        val checkoutBtn = rootView?.findViewById(R.id.Checkoutbutton) as FButton
+        checkoutBtn.setOnClickListener {
+            val intent = Intent(activity, CheckOutActivity::class.java)
+            intent.putExtra("listProduct",cartProductList)
+            startActivity(intent)
+        }
+        val loadCart = Thread ({
+            cartProductList = ArrayList()
+            val db = context.database.writableDatabase
+            db.select(CartDatabaseAPI.TABLE_NAME).exec {
+                parseList( object : MapRowParser<Map<String, Any?>> {
+                    override fun parseRow(columns: Map<String, Any?>): Map<String, Any?> {
+                        Log.e("Your result", columns.toString())
+                        val cartItems = CartDataModel((columns[CartDatabaseAPI.PRODUCT_ID] as Long).toInt(),
+                                columns[CartDatabaseAPI.PRODUCT_IMAGE] as String,
+                                columns[CartDatabaseAPI.PRODUCT_NAME] as String,
+                                (columns[CartDatabaseAPI.PRODUCT_PRICE] as Long),
+                                columns[CartDatabaseAPI.SELLER_NAME] as String,
+                                (columns[CartDatabaseAPI.TOTAL_AMOUNT] as Long).toInt(),
+                                (columns[CartDatabaseAPI.TOTAL_MONEY] as Long),
+                                columns[CartDatabaseAPI.CREATED_TIME] as String)
+                        cartProductList!!.add(cartItems)
+                        return columns
+                    }
+                }
+                )
+            }
+
+            if (activity == null) {
+                return@Thread
+            }
+
+            if (cartProductList!!.size > 0) {
+                activity.runOnUiThread {
+                    adapter = CartAdapter(cartProductList!!,context, object : ProductListAdapter.ButtonClickListener {
+                        override fun onButtonClick(position: Int) {
+                            val db = context.database.writableDatabase
+                            db.delete(CartDatabaseAPI.TABLE_NAME,CartDatabaseAPI.PRODUCT_ID + "=" + cartProductList!![position].productID.toString(),null)
+                            adapter?.notifyDataSetChanged()
+                            reloadView()//To change body of created functions use File | Settings | File Templates.
+//                            ProgressDialogUtils.sharedInstance.hideProgressDialog()
+                        }
+                    })
+                    adapter?.notifyDataSetChanged()
+                    cartlistView.adapter = adapter
+//                    ProgressDialogUtils.sharedInstance.hideProgressDialog()
+                }
+            }
+            else {
+                activity.runOnUiThread {
+                    checkoutBtn.visibility = View.GONE
+                    ProgressDialogUtils.sharedInstance.hideProgressDialog()
+                    progressRelativeLayout = rootView?.findViewById(R.id.progressCart) as ProgressFrameLayout
+                    val emptyDrawable = IconDrawable(context, Iconify.IconValue.zmdi_shopping_cart)
+                            .colorRes(android.R.color.darker_gray)
+                    progressRelativeLayout.showEmpty(emptyDrawable,
+                            "Empty Cart",
+                            "There are no content to view now.")
+                }
+            }
+        })
+        loadCart.start()
+//        progressRelativeLayout = rootView?.findViewById(R.id.progress) as ProgressFrameLayout
+//        val emptyDrawable = IconDrawable(context, Iconify.IconValue.zmdi_shopping_cart)
+//                .colorRes(android.R.color.darker_gray)
+//        progressRelativeLayout.showEmpty(emptyDrawable,
+//                "Empty Cart",
+//                "There are no content to view now.")
+//        val CheckoutButton = rootView?.findViewById(R.id.Checkoutbutton) as info.hoang8f.widget.FButton
+//        productID = ArrayList()
 //        cartlistView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
 //            //Cart item click
 //        }

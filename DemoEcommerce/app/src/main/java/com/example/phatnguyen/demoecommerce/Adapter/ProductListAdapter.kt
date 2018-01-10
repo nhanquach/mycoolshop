@@ -8,9 +8,8 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
+import com.example.phatnguyen.demoecommerce.CustomView.DynamicValueTextView
 import com.example.phatnguyen.demoecommerce.DataModel.ProductDataModel
 import com.example.phatnguyen.demoecommerce.R
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache
@@ -68,6 +67,7 @@ class ProductListAdapter() : BaseAdapter(), Parcelable {
         var productName: TextView? = null
         var addedInfo: TextView? = null
         var productPrice: TextView? = null
+        var totalAmount: DynamicValueTextView? = null
         var addToCart: info.hoang8f.widget.FButton? = null
     }
 
@@ -88,23 +88,17 @@ class ProductListAdapter() : BaseAdapter(), Parcelable {
         viewHolder.productName = convertView?.findViewById(R.id.productname) as TextView
         viewHolder.productPrice = convertView.findViewById(R.id.productprice) as TextView
         viewHolder.productImage = convertView.findViewById(R.id.productimageview) as ImageView
+        viewHolder.totalAmount = convertView.findViewById(R.id.text_view) as DynamicValueTextView
         viewHolder.addedInfo = convertView.findViewById(R.id.addedInfo) as TextView
         viewHolder.addedInfo?.visibility = View.GONE
         viewHolder.addToCart = convertView.findViewById(R.id.Addtocart) as info.hoang8f.widget.FButton
-
         viewHolder.addToCart?.tag = position
-
-        viewHolder.addToCart?.setOnClickListener({ v ->
-            if (mCartClickListener != null)
-                mCartClickListener!!.onButtonClick(v.tag as Int)
-        })
-
         viewHolder.productImage?.layoutParams?.width = screenWidth
         viewHolder.productImage?.layoutParams?.height = Math.round((screenWidth / 2).toFloat())
         viewHolder.productImage?.requestLayout()
-
+        viewHolder.totalAmount?.setValues(1)
         viewHolder.productName?.text = currentProduct?.name
-        viewHolder.productPrice?.text = currentProduct?.price.toString()
+        viewHolder.productPrice?.text = currentProduct?.price.toString() + " VND"
 
         Picasso.with(mContext)
                 .setIndicatorsEnabled(false)
@@ -114,6 +108,10 @@ class ProductListAdapter() : BaseAdapter(), Parcelable {
                 .error(R.drawable.rect_error)
                 .into(viewHolder.productImage)
 
+        viewHolder.addToCart?.setOnClickListener({ v ->
+            if (mCartClickListener != null)
+                mCartClickListener!!.onButtonClick(v.tag as Int)
+        })
 
         return convertView
     }

@@ -16,7 +16,7 @@ import com.vlonjatg.progressactivity.ProgressFrameLayout
  */
 class AboutFragment: Fragment() {
     private var listener: OnFragmentInteractionListener? = null
-    private lateinit var progressRelativeLayout: ProgressFrameLayout
+//    private lateinit var progressRelativeLayout: ProgressFrameLayout
 
     companion object {
         val sharedInstance: AboutFragment by lazy { Holder.INSTANCE }
@@ -29,14 +29,14 @@ class AboutFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater!!.inflate(R.layout.profile_fragment_layout, container, false)
+        val rootView = inflater!!.inflate(R.layout.about_fragment_layout, container, false)
         activity.title = "About"
-        progressRelativeLayout = rootView?.findViewById(R.id.progress) as ProgressFrameLayout
-        val emptyDrawable = IconDrawable(context, Iconify.IconValue.zmdi_account_box_mail)
-                .colorRes(android.R.color.darker_gray)
-        progressRelativeLayout.showEmpty(emptyDrawable,
-                "Empty About",
-                "There are no content to view now.")
+//        progressRelativeLayout = rootView?.findViewById(R.id.progressAbout) as ProgressFrameLayout
+//        val emptyDrawable = IconDrawable(context, Iconify.IconValue.zmdi_account_box_mail)
+//                .colorRes(android.R.color.darker_gray)
+//        progressRelativeLayout.showEmpty(emptyDrawable,
+//                "Empty About",
+//                "There are no content to view now.")
         return rootView
     }
 

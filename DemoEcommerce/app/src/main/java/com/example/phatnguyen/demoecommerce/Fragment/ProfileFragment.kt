@@ -7,23 +7,18 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.*
 import com.example.phatnguyen.demoecommerce.Activity.LoginActivity
-import com.example.phatnguyen.demoecommerce.Activity.MainActivity
 import com.example.phatnguyen.demoecommerce.R
-import com.google.firebase.auth.FirebaseAuth
-import com.malinskiy.materialicons.IconDrawable
-import com.malinskiy.materialicons.Iconify
 import com.vlonjatg.progressactivity.ProgressFrameLayout
-import android.text.method.TextKeyListener.clear
 import android.view.MenuInflater
-import android.support.v4.content.IntentCompat
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.Color
 import com.example.phatnguyen.demoecommerce.Utils.DefaultSettings
 import com.example.phatnguyen.demoecommerce.Utils.UserSettings
 import android.text.style.ForegroundColorSpan
 import android.text.SpannableString
-import android.R.string.cancel
 import com.example.phatnguyen.demoecommerce.Utils.ProgressDialogUtils
+import info.hoang8f.widget.FButton
+import android.widget.TextView
+import com.example.phatnguyen.demoecommerce.Activity.ManageOrdersActivity
 
 
 /**
@@ -48,12 +43,25 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.profile_fragment_layout, container, false)
         activity.title = "Profile"
-        progressRelativeLayout = rootView?.findViewById(R.id.progress) as ProgressFrameLayout
-        val emptyDrawable = IconDrawable(context, Iconify.IconValue.zmdi_account)
-                .colorRes(android.R.color.darker_gray)
-        progressRelativeLayout.showEmpty(emptyDrawable,
-                "Empty Profile",
-                "There are no content to view now.")
+        val manageOrdersBtn = rootView?.findViewById(R.id.manageOrdersBtn) as FButton
+        val userName = rootView?.findViewById(R.id.user_profile_name) as TextView
+        userName.text = DefaultSettings.sharedInstance.getDefaults(UserSettings.name(),context)
+        if (DefaultSettings.sharedInstance.getDefaults(UserSettings.type(),context) == "user") {
+            manageOrdersBtn.visibility = View.GONE
+        }
+        else {
+            manageOrdersBtn.visibility = View.VISIBLE
+        }
+        manageOrdersBtn.setOnClickListener {
+                val intent = Intent(context,ManageOrdersActivity::class.java)
+                startActivity(intent)
+        }
+//        progressRelativeLayout = rootView?.findViewById(R.id.progress) as ProgressFrameLayout
+//        val emptyDrawable = IconDrawable(context, Iconify.IconValue.zmdi_account)
+//                .colorRes(android.R.color.darker_gray)
+//        progressRelativeLayout.showEmpty(emptyDrawable,
+//                "Empty Profile",
+//                "There are no content to view now.")
         return rootView
     }
 
