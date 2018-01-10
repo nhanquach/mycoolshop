@@ -1,4 +1,0 @@
-#Tue Jan 09 22:22:59 ICT 2018
-base.0=/Users/phatnguyen/Downloads/DemoEcommerce/app/build/intermediates/transforms/dexMerger/debug/8
-renamed.0=classes.dex
-file.0=/Users/phatnguyen/Downloads/DemoEcommerce/app/build/intermediates/transforms/dexMerger/debug/8/classes.dex

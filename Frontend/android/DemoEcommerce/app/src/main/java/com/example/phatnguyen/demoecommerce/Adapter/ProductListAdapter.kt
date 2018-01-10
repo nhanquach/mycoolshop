@@ -97,8 +97,8 @@ class ProductListAdapter() : BaseAdapter(), Parcelable {
         viewHolder.productImage?.layoutParams?.height = Math.round((screenWidth / 2).toFloat())
         viewHolder.productImage?.requestLayout()
         viewHolder.totalAmount?.setValues(1)
-        viewHolder.productName?.text = currentProduct?.name
-        viewHolder.productPrice?.text = currentProduct?.price.toString() + " VND"
+        viewHolder.productName?.text = "Product: " + currentProduct?.name
+        viewHolder.productPrice?.text = "Price: " + currentProduct?.price.toString() + " USD"
 
         Picasso.with(mContext)
                 .setIndicatorsEnabled(false)
