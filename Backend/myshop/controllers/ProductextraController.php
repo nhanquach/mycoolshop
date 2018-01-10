@@ -3,6 +3,8 @@
 
   use yii\rest\ActiveController;
   use yii\filters\auth\HttpBasicAuth;
+  use yii\data\ActiveDataProvider;
+  use yii\db\Query;
 
   use app\models\ProductExtra;
 
@@ -13,16 +15,7 @@
   {
     public $modelClass = 'app\models\ProductExtra';
 
-    protected function verbs()
-    {
-        return [
-            'index' => ['GET', 'HEAD'],
-            'view' => ['GET', 'HEAD'],
-            'create' => ['POST'],
-            'update' => ['PUT', 'PATCH'],
-            'delete' => ['DELETE'],
-        ];
-    }
+    
 
     public function actions()
     {
@@ -47,6 +40,23 @@
         return $s;
       }
     }
-  }
+
+    public function actionGetextraid($pid)
+    {
+      $query = (new Query())->from('Product_Extra')->where(['product_id'=>$pid]);
+      $provider = new ActiveDataProvider([
+        'query' => $query,
+      ]);
+      //Products Array
+      $extra_arr = $provider->getModels();
+
+      //Make $products_arr an Array of Objects
+      for ($i=0; $i < count($extra_arr); $i++) {
+        $extra_arr[$i] = (Object) $extra_arr[$i];
+      }
+      return $extra_arr;
+    }
+
+  };
 
 ?>

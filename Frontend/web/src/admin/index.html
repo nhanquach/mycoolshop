@@ -7,6 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="../../css/bootstrap.css">
         <link rel="stylesheet" href="../../css/main.css">
+        <script src="../../js/moment.min.js"></script>
         <script src="../../js/firebase.js"></script>
         <script src="../../js/file.js"></script>
         <script src="../../js/angular.js" charset="utf-8"></script>
@@ -19,7 +20,6 @@
         <link
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
             rel="stylesheet">
-        <script src="../../js/moment.min.js"></script>
         <script src="../../js/ui-bootstrap.min.js"></script>
         <script src="../../js/datetime-picker.min.js"></script>
     </head>
@@ -44,7 +44,7 @@
                             Admin home
                         </a>
                     </li>
-                    <li class="nav-item" ng-if="admin.username" =="admin" ">
+                    <li class="nav-item" ng-if="admin.username==admin">
                         <a class="nav-link" href="#!/home">
                             Summary
                         </a>
@@ -102,7 +102,7 @@
             </div>
         </nav>
 
-        <ng-view onload="" $autoscroll=""></ng-view>
+        <ng-view onload="" autoscroll></ng-view>
 
         <!-- in-page new Category Modal -->
         <div class="modal fade" id="CategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

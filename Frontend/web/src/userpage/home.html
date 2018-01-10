@@ -1,0 +1,103 @@
+<div class="container" ng-init="getUserOrders();">
+    <h3 class="display-4">
+        Hello, {{user_status}}
+        <a href="#!/edit_account" class="btn btn-outline-info btn-sm">Edit account</a>
+    </h3>
+    <h5>You can manage your account from here.</h5>
+
+    <div class="card">
+        <div class="card-body">
+            <!-- Upcomming -->
+            <div class="card-title lead" >At a glace <br/><strong>Upcomming</strong></div>
+            <div class="row card-deck" style="white-space: nowrap; display:inline-block; position: relative;  width: 100%; overflow-x: auto;">
+                <div class="card" style="display: inline-block; overflow-x: auto; margin: 1em; background: teal; color: white;">
+                    <div class="card-body">
+                        <div class="card-title lead">
+                            <b>Intruction</b>
+                        </div> 
+                        <div class="card-text">
+                            This is all of your Progressing Orders <br/>
+                            Scroll left for more.
+                        </div>
+                        <div class="card-text">
+                            <--
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="display: inline-block; overflow-x: auto; margin: 1em;" ng-repeat="o in upcomming_orders track by $index">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <strong>Order #{{o.id_order_products}}</strong>
+                        </div>
+                        <div class="card-text">
+                            Price: {{o.price|currency}}<br/>
+                            Ordered on: {{o.created_at|date:"MM/dd/yyyy"}}<br/>
+                            ETA: {{o.ETA}}
+                        </div>
+                        <br/>
+                        <a href="" ng-click="getOrderProducts(o)" class="btn btn-outline-primary form-control">More info</a>
+                    </div>
+                </div>
+                <div class="card" style="display: inline-block; overflow-x: auto; margin: 1em; background: teal; color: white;">
+                    <div class="card-body">
+                        <div class="card-title lead">
+                            <b>Buy more to scroll more</b>
+                        </div>
+                        <div class="card-text">
+                            <br/>You know you want to.<br/>
+                        </div>
+                        <div class="card-text">
+                        --> </div>
+                        </div>
+                    </div>
+            </div>
+            
+            <!-- Done -->
+            <div class="card-title lead">
+                <br/>
+                <strong>Finnished</strong>
+            </div>
+            <div class="row card-deck" style="white-space: nowrap; display:inline-block; position: relative;  width: 100%; overflow-x: auto;">
+                <div class="card" style="display: inline-block; overflow-x: auto; margin: 1em;" ng-repeat="o in done_orders track by $index">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <strong>Order #{{o.id_order_products}}</strong>
+                        </div>
+                        <div class="card-text">
+                            Price: {{o.price|currency}}
+                        </div>
+                        <div class="card-text">
+                            Ordered on: {{o.created_at|date}}
+                        </div>
+                        <div class="card-text" style="color: blue">
+                            {{o.status}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Cancelled -->
+            <div class="card-title lead">
+                <br/>
+                <strong>Cancelled</strong>
+            </div>
+            <div class="row card-deck" style="white-space: nowrap; display:inline-block; position: relative;  width: 100%; overflow-x: auto; ">
+                <div class="card" style="display: inline-block; overflow-x: auto; margin: 1em;" ng-repeat="o in cancelled_orders track by $index">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <strong>Order #{{o.id_order_products}}</strong>
+                        </div>
+                        <div class="card-text">
+                            Price: {{o.price|currency}}
+                        </div>
+                        <div class="card-text">
+                            Ordered on: {{o.created_at|date}}
+                        </div>
+                        <div class="card-text" style="color: orange">
+                            {{o.status}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

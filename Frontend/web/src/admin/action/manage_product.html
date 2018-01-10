@@ -1,0 +1,70 @@
+<div class="container-fluid" ng-controller="manage_productController">
+    <h1 class="display-4">Manage Products</h1>
+    <table class="table table-bordered table-responsive table-hover table-default">
+        <thead style="text-align: center">
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Categories</th>
+            <th>Subcategories</th>
+            <th>Added on</th>
+            <th>Available time</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="p in products | orderBy: created_at">
+                <td>{{p.id}}</td>
+                <td>{{p.name}}</td>
+                <td>{{p.price | currency}}</td>
+                <td>
+                    <ul>
+                        <li ng-repeat="c in p.category">{{c.name}}</li>
+                    </ul>
+                    
+                </td>
+                <td>
+                    <ul>
+                        <li ng-repeat="c in p.subcategory">{{c.name}}</li>
+                    </ul>
+                </td>
+                <td>{{p.created_at}}</td>
+                <td>
+                    From 
+                    <a href="">{{p.available_start}}</a> 
+                    to 
+                    <a href="">{{p.available_end}}</a>
+                </td>
+                <td>
+                    <button ng-click="edit_product(p)" class="btn btn-primary"><span class="material-icons">edit</span></button>
+                    <button ng-click="confirm_delete_product(p)" class="btn btn-danger">
+                        <span class="material-icons">delete</span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modelTitleId">Confirm</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        Are you sure to delete this?
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-danger" ng-click="delete_aproduct()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="io.saeid:support-animator-0.2.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-animator-0.2.1.aar/06d2d8402ba9dece87b959c4d5ce3e9a/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-animator-0.2.1.aar/06d2d8402ba9dece87b959c4d5ce3e9a/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.saeid/support-animator/0.2.1/52ba1e022288730d59e36db158da5b02cf0b0725/support-animator-0.2.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

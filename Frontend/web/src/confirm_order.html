@@ -3,15 +3,19 @@
 
     <div class="card card-body" style="margin-bottom: 2rem;">
         <h3 class="lead card-title">Your Info</h3>
-        <p class="card-text">Name: </p>
-        <p class="card-text">Address: </p>
-        <p class="card-text">Note: </p>
+        <p class="card-text">Order #{{order.id_order_products}}</p>
+        <p class="card-text">Name: {{order.user_name}} (#{{order.id_user}})</p>
+        <p class="card-text">Address: {{order.address}}</p>
+        <p class="card-text">Phone: {{order.phone}}</p>
+        <p class="card-text">Email: {{order.email}}</p>
+        <p class="card-text">Note: {{order.delivery_note}}</p>
     </div>
     
     <div class="card card-body">
         <h3 class="lead">Your item(s):</h3>
         <table class="table table-bordered">
             <thead>
+                <th>Product id</th>
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Price per product</th>
@@ -19,6 +23,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="item in cart_items">
+                    <td>{{item.id}}</td>
                     <td>{{item.name}} </td>
                     <td>{{item.quantity}} </td>
                     <td>{{item.price | currency}} </td>
@@ -33,5 +38,27 @@
         </div>
     </div>
     <br/>
-    <a href="" class="btn btn-primary form-control">Confirm and order</a>
+    <a ng-click= "placeOrder(order, cart_items);" href="" class="btn btn-primary form-control">Confirm and order</a>
+
+    <div id="modal_thankyou" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Your order is placed.
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body container">
+                    <p class="display-4">Thank you for using our service.</p>
+                    <p>We wish you a merry Christmas. <i class="material-icons" style="color: pink">favorite</i></p>
+                </div>
+                <div class="modal-footer">
+                    <a ng-click="backtoShop();" type="button" class="btn btn-secondary" data-dismiss="modal">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

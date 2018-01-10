@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorBackground">#F8F8F8</color>
+    <color name="colorNavAccentSelected">#FF9800</color>
+    <color name="colorNavAccentUnselected">#2196F3</color>
+    <string name="app_name">Library</string>
+</resources>

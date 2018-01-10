@@ -4266,9 +4266,11 @@ tbody.collapse.show {
   }
   .card-columns .card {
     display: inline-block;
-    width: 100%;
+    width: 100%;	
   }
 }
+
+
 
 .breadcrumb {
   display: -ms-flexbox;

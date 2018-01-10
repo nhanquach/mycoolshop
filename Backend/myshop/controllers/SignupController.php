@@ -12,7 +12,6 @@
   class SignupController extends ActiveController
   {
     public $modelClass = 'app\models\Loginuser';
-
   }
 
 ?>

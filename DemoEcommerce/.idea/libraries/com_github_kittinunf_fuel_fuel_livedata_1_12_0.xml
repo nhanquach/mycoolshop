@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.github.kittinunf.fuel:fuel-livedata-1.12.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fuel-livedata-1.12.0.aar/41278b99220e47e541b438b263ce6167/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fuel-livedata-1.12.0.aar/41278b99220e47e541b438b263ce6167/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.kittinunf.fuel/fuel-livedata/1.12.0/4ee818dfc38c97a81663779e9d288a313cc3ebd5/fuel-livedata-1.12.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

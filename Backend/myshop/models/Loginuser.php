@@ -30,8 +30,8 @@ class Loginuser extends \yii\db\ActiveRecord
         return [
             [['password','email'], 'required'],
             [['_id'], 'integer'],
-            [['password', 'userType'], 'string'],
-            [['username'], 'string', 'max' => 50],
+            [['password', 'userType', 'phone', 'address'], 'string'],
+            [['username'], 'string', 'max' => 255],
         ];
     }
 
