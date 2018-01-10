@@ -11,7 +11,7 @@
   </div>
   <div class="row">
     <div class="card-columns">
-        <div class="card text-center" ng-repeat="d in products">
+        <div class="card text-center" ng-repeat="d in products | filter: textSearch">
           <img ng-src="{{d.image}}" alt="" class="card-img-top" ng-click="moreInfo(d)">
           <div class="card-body" >
             <h3 class="card-title lead" ng-click="moreInfo(d)">{{d.name}}</h3>
@@ -23,24 +23,3 @@
     </div>
   </div>
 </div>
-
-
-
-<!-- <div class="container-fluid" style="margin-top: 15px">
-  <div class="">
-    <h1 class="display-4">Nice to meet you.</h1>
-    <p class="lead">Feeling shopping?</p>
-  </div>
-  <div class="row d-flex justify-content-center">
-    <div class="col-md-4" ng-repeat="d in products" 
-    style="text-align: center; margin-top: 15px;">
-      <a class="product_thumbnail" href="" ng-click="moreInfo(d)">
-      <img ng-src="{{d.image}}" alt="{{d.name}}_thumbnail" class="img-thumbnail" style="max-width: 250px; max-height: 250px">
-      <h4>{{d.name}}</h4>
-      <h5 class="lead">{{d.price| currency}}</h5>
-      </a>
-      <a class="btn btn-outline-info" ng-click="moreInfo(d)">See more</a>
-      <a class="btn btn-outline-primary" ng-click="addToCart(d, 1)">Add to cart</a>
-    </div>
-  </div>
-</div> -->

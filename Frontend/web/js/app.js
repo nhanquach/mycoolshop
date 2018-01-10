@@ -334,7 +334,7 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
     $scope.status = "Auto fill";
   }
 
-  $scope.order = {};
+  $scope.order = {};  
 
   $scope.auto_fill = function () {
     if ($scope.user_status == undefined) {

@@ -34,8 +34,7 @@
         if (sizeof($u) != 0) {
             return $u;
         } else {
-            $s = "None";
-            return $s;
+            return "None";
         }
     }
   }

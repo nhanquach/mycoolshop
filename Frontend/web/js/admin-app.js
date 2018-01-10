@@ -82,7 +82,6 @@ app.controller('AdminController', ['$scope', '$http', '$location', '$localStorag
 
   $scope.checkCurrentUser = function () {
     currentUser = $localStorage.currentUser;
-    //console.log($localStorage.currentUser == undefined);
     if (currentUser == undefined) {
       $location.path('login');
       return false;
@@ -109,11 +108,12 @@ app.controller('AdminController', ['$scope', '$http', '$location', '$localStorag
     let email = user.email;
     let password = user.password;
 
-    $http.post(user_login_url+"&email="+email+"&"+"password="+password).then(function (res) {
+    $http.post(user_login_url + "&email=" + email + "&" + "password=" + password).then(function (res) {
+      console.log(res);
       $scope.alert.show = false;
       let r = res.data;
 
-      if (r == "None") {
+      if (r == "") {
         $scope.alert.show = true;
       } ;
 
@@ -166,7 +166,6 @@ app.controller('AdminController', ['$scope', '$http', '$location', '$localStorag
 
   var new_extra = function (extra) {
     console.log(extra_post_url);
-    //[['product_id', 'category_id', 'subcategory_id'], 'required']
     $http.post(extra_post_url, extra)
       .then(function () {
         $scope.status = "Got it!";
@@ -209,6 +208,43 @@ app.controller('AdminController', ['$scope', '$http', '$location', '$localStorag
       }
     );
   }
+
+  $scope.isEditMode = false;
+
+  $scope.update_subcategory = function (c) {
+    $scope.subcategory = c;
+    $scope.isEditMode = true;
+  }
+
+  $scope.sub_confirm_update = function (c) {
+    let url = host + "subcategory/update&id=" + c._id;
+    $http.put(url, c)
+      .then(function (data) {
+        console.log(data.data);
+        $scope.subcategory = "";
+        $scope.isEditMode = false;
+      }).catch(function (err) {
+        console.log(err);
+      });
+  }
+
+  $scope.confirm_delete_subcategory = function (c) {
+    $scope.a = c;
+    $('#sub_confirm_deleteModal').modal('show');
+  }
+
+  /* Function to delete a category */
+  $scope.delete_subcategory = function (c) {
+    let delete_url = subcategory_url + "/delete&id=" + c._id;
+    $http.delete(delete_url, c)
+      .then((value) => {
+      $scope.a_category = $scope.getAvailableSubcategory();
+    })
+      .catch((err) => {
+        $scope.a_category = $scope.getAvailableSubcategory();
+      });
+  };
+
   /* Get the available Subcategories to display in a table */
   $scope.getAvailableSubcategory = function () {
     $http.get(subcategory_url).then(function (res) {
@@ -250,6 +286,23 @@ app.controller('AdminController', ['$scope', '$http', '$location', '$localStorag
       $scope.a_category = res.data;
     });
   };
+
+  $scope.update_category = function (c) {
+    $scope.category = c;    
+    $scope.isEditMode = true;
+  }
+
+  $scope.confirm_update = function (c){
+    let url = host + "category/update&id=" + c._id;
+    $http.put(url, c)
+      .then(function (data) {
+        console.log(data.data);
+        $scope.category = "";
+        $scope.isEditMode = false;
+      }).catch(function (err) {
+        console.log(err);
+      });
+  }
   
   /* Scope variable for display data to table */
   $scope.a_category = $scope.getAvailableCategory();
@@ -378,18 +431,23 @@ app.controller('UploadCtrl', ['$firebaseStorage', '$scope', '$timeout', 'sharedD
   $scope.thumbnail = false;
   var ctrl = this;
   ctrl.fileToUpload = null;
+
+  //Call when new file is selected.
   ctrl.onChange = function onChange(fileList) {
     ctrl.fileToUpload = fileList[0];
     var r = Math.random().toString(36).substr(2, 15);
     var storageRef = firebase.storage().ref("product_images/"+r);
     var storage = $firebaseStorage(storageRef);
     var uploadTask = storage.$put(ctrl.fileToUpload);
+    
     uploadTask.$progress(function (snapshot) {
+      //Progress update
       $scope.bar = true;
       $scope.percentUploaded = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       console.log($scope.percentUploaded);
     });
     uploadTask.$complete(function (snapshot) {
+      //Completed
       $scope.downloadURL = snapshot.downloadURL;
       sharedData.saveData($scope.downloadURL);
       $timeout(function () {
@@ -398,6 +456,7 @@ app.controller('UploadCtrl', ['$firebaseStorage', '$scope', '$timeout', 'sharedD
       $scope.thumbnail = true;
     });
     uploadTask.$error(function (error) {
+      //Something wrong.
       console.error(error);
       $scope.bar = false;
     });
