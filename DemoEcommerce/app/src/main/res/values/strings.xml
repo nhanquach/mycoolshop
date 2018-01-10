@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DemoEcommerce</string>
+    <string name="action_signout">SignOut</string>
+    <string name="deleted_cart">"ITEM SUCCESSFULLY DELETED FROM THE CART"</string>
+</resources>

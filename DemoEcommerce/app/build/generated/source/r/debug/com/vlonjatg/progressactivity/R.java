@@ -38,12 +38,12 @@ public final class R {
         public static final int linear_layout_empty = 0x7f08007c;
         public static final int linear_layout_error = 0x7f08007d;
         public static final int linear_layout_progress = 0x7f08007e;
-        public static final int progress_bar_loading = 0x7f0800a4;
-        public static final int relative_layout_empty = 0x7f0800a8;
-        public static final int relative_layout_error = 0x7f0800a9;
-        public static final int relative_layout_progress = 0x7f0800aa;
-        public static final int text_content = 0x7f0800de;
-        public static final int text_title = 0x7f0800e0;
+        public static final int progress_bar_loading = 0x7f0800a3;
+        public static final int relative_layout_empty = 0x7f0800a7;
+        public static final int relative_layout_error = 0x7f0800a8;
+        public static final int relative_layout_progress = 0x7f0800a9;
+        public static final int text_content = 0x7f0800dd;
+        public static final int text_title = 0x7f0800df;
     }
     public static final class layout {
         public static final int progress_frame_layout_empty_view = 0x7f0a0049;

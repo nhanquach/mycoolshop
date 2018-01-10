@@ -45,10 +45,9 @@ class OrderProductDetailAdapter() : BaseAdapter() {
         viewHolder.productPrice = convertView?.findViewById(R.id.SellerProductPrice) as TextView
         viewHolder.productQuantity = convertView?.findViewById(R.id.SellerProductQuantity) as TextView
 
-        viewHolder.productName?.text = currentProduct?.product_name.toString()
-        viewHolder.productPrice?.text = currentProduct?.product_price.toString()
-        viewHolder.productName?.text = currentProduct?.product_name.toString()
-        viewHolder.productQuantity?.text = currentProduct?.product_quantity.toString()
+        viewHolder.productName?.text = "Product: " + currentProduct?.product_name.toString()
+        viewHolder.productPrice?.text = "Price: " + currentProduct?.product_price.toString()
+        viewHolder.productQuantity?.text = "Quantity: " + currentProduct?.product_quantity.toString()
 
         return convertView
     }

@@ -10,13 +10,13 @@ class CartDataModel: Serializable {
     var productID : Int = 0
     var productImage : String? = null
     var productName : String? = null
-    var productPrice : Long = 0.toLong()
+    var productPrice : Double = 0.toDouble()
     var sellerName : String? = null
     var totalAmount : Int = 0
-    var totalMoney : Long = 0.toLong()
+    var totalMoney : Double = 0.toDouble()
     var createdTime : String? = null
 
-    constructor(productID: Int, productImage: String, productName: String, productPrice: Long, sellerName: String, totalAmount: Int, totalMoney: Long, createdTime: String) {
+    constructor(productID: Int, productImage: String, productName: String, productPrice: Double, sellerName: String, totalAmount: Int, totalMoney: Double, createdTime: String) {
         this.productID = productID
         this.productImage = productImage
         this.productName = productName

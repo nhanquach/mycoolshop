@@ -7,7 +7,7 @@
     format="10"
     ir-eligibility="COMPATIBLE"
     plugin-version="3.0.0"
-    timestamp="1515513380013"
+    timestamp="1515598903186"
     token="-1501396205637082314"
     verifier="COLD_SWAP_REQUESTED" >
 
@@ -19,13 +19,13 @@
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="54" />
+        duration="28" />
     <task
         name="verifier"
-        duration="6" />
+        duration="1" />
 
     <artifact
-        location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
+        location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/intermediates/split-apk/debug/slices/slice_2.apk"
         type="SPLIT" />
     <artifact
         location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/outputs/apk/debug/app-debug.apk"
@@ -33,13 +33,10 @@
 
     <build
         build-mode="FULL"
-        timestamp="1515512907390"
+        timestamp="1515598309104"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/intermediates/split-apk/debug/slices/slice_2.apk"
-            type="SPLIT" />
-        <artifact
-            location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
             type="SPLIT" />
         <artifact
             location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/outputs/apk/debug/app-debug.apk"
@@ -52,6 +49,9 @@
             type="SPLIT" />
         <artifact
             location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/intermediates/split-apk/debug/dep/dependencies.apk"
+            type="SPLIT" />
+        <artifact
+            location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
             type="SPLIT" />
         <artifact
             location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/intermediates/split-apk/debug/slices/slice_8.apk"
@@ -74,12 +74,9 @@
     </build>
     <build
         build-mode="COLD"
-        ir-eligibility="COMPATIBLE"
-        timestamp="1515513290291"
+        ir-eligibility="METHOD_DELETED"
+        timestamp="1515598679469"
         verifier="COLD_SWAP_REQUESTED" >
-        <artifact
-            location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/intermediates/split-apk/debug/slices/slice_2.apk"
-            type="SPLIT" />
         <artifact
             location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/outputs/apk/debug/app-debug.apk"
             type="SPLIT_MAIN" />
@@ -87,10 +84,10 @@
     <build
         build-mode="COLD"
         ir-eligibility="COMPATIBLE"
-        timestamp="1515513380013"
+        timestamp="1515598903186"
         verifier="COLD_SWAP_REQUESTED" >
         <artifact
-            location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
+            location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/intermediates/split-apk/debug/slices/slice_2.apk"
             type="SPLIT" />
         <artifact
             location="/Users/phatnguyen/Downloads/DemoEcommerce/app/build/outputs/apk/debug/app-debug.apk"

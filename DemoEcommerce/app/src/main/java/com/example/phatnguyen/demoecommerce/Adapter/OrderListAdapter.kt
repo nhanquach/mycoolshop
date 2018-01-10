@@ -56,7 +56,6 @@ class OrderListAdapter() : BaseAdapter() {
 
         viewHolder = ViewHolder()
         viewHolder.orderName = convertView?.findViewById(R.id.orderName) as TextView
-        viewHolder.orderer = convertView?.findViewById(R.id.orderer) as TextView
         viewHolder.address = convertView?.findViewById(R.id.address) as TextView
         viewHolder.delivery_note = convertView?.findViewById(R.id.delivery_note) as TextView
         viewHolder.price = convertView?.findViewById(R.id.price) as TextView
@@ -66,14 +65,13 @@ class OrderListAdapter() : BaseAdapter() {
         viewHolder.orderDesBtn = convertView?.findViewById(R.id.orderDesBtn) as FButton
         viewHolder.orderDesBtn?.tag = position
 
-        viewHolder.orderName?.text = "Order" + currOrder!!.created_at
-        viewHolder.orderer?.text = currOrder.id_user
-        viewHolder.address?.text = currOrder.address
-        viewHolder.delivery_note?.text = currOrder.delivery_note
-        viewHolder.price?.text = currOrder.price.toString()
-        viewHolder.phone?.text = currOrder.phone
-        viewHolder.email?.text = currOrder.email
-        viewHolder.status?.text = currOrder.status
+        viewHolder.orderName?.text = "ORDER " + currOrder!!.created_at
+        viewHolder.address?.text = "Address: " + currOrder.address
+        viewHolder.delivery_note?.text = "Note: " + currOrder.delivery_note
+        viewHolder.price?.text = "Price: " + currOrder.price.toString()
+        viewHolder.phone?.text = "Phone: " + currOrder.phone
+        viewHolder.email?.text = "Email: " + currOrder.email
+        viewHolder.status?.text = "Status: " + currOrder.status
         viewHolder.orderDesBtn?.setOnClickListener ({ v ->
             if (mDesClickListener != null) {
                 mDesClickListener!!.onButtonClick(v.tag as Int)

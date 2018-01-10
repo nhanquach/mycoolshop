@@ -24,7 +24,7 @@ public final class R {
     public static final class id {
         public static final int clamp = 0x7f080039;
         public static final int mirror = 0x7f080087;
-        public static final int repeat = 0x7f0800ab;
+        public static final int repeat = 0x7f0800aa;
     }
     public static final class string {
         public static final int define_roundedimageview = 0x7f0d0038;

@@ -87,44 +87,44 @@ class ManageOrdersActivity: AppCompatActivity() {
         })
         getUserAdapter.start()
 
-        val getOrdersAdapter = Thread ({
-            Log.d(TAG, "runThread(): ${Thread.currentThread().name}")
-            val json = NetworkUtils.sharedInstance.readUrl(Constant.SERVER_URL + "order")
-            val gson = GsonBuilder()
-                    .setDateFormat(Ecommerce.sharedInstance.df).create()
-            val orders = gson.fromJson(json, Array<OrderDataModel>::class.java)
-
-            for (item in orders) {
-                mOrder!!.add(item)
-            }
-
-            if (this == null) {
-                return@Thread
-            }
-
-            if (mOrder!!.size > 0) {
-                this.runOnUiThread {
-                    Log.i(TAG, "runOnUiThread")
-                    val adapter = OrderListAdapter(applicationContext,mOrder,object: OrderListAdapter.ButtonClickListener {
-                        override fun onButtonClick(position: Int) {
-                            //SHow detail here
-                            val intent = Intent(applicationContext, ProductDetailActivity::class.java)
-                            intent.putExtra("orderId", mOrder!![position].id_order_products)
-                            startActivity(intent)
-                        }
-                    })
-                    adapter.notifyDataSetChanged()
-                    orders_list.adapter = adapter
-//                    ProgressDialogUtils.sharedInstance.hideProgressDialog()
-                }
-            }
-            else {
-//                ProgressDialogUtils.sharedInstance.hideProgressDialog()
-            }
-
-        })
-
-        getOrdersAdapter.start()
+//        val getOrdersAdapter = Thread ({
+//            Log.d(TAG, "runThread(): ${Thread.currentThread().name}")
+//            val json = NetworkUtils.sharedInstance.readUrl(Constant.SERVER_URL + "order")
+//            val gson = GsonBuilder()
+//                    .setDateFormat(Ecommerce.sharedInstance.df).create()
+//            val orders = gson.fromJson(json, Array<OrderDataModel>::class.java)
+//
+//            for (item in orders) {
+//                mOrder!!.add(item)
+//            }
+//
+//            if (this == null) {
+//                return@Thread
+//            }
+//
+//            if (mOrder!!.size > 0) {
+//                this.runOnUiThread {
+//                    Log.i(TAG, "runOnUiThread")
+//                    val adapter = OrderListAdapter(applicationContext,mOrder,object: OrderListAdapter.ButtonClickListener {
+//                        override fun onButtonClick(position: Int) {
+//                            //SHow detail here
+//                            val intent = Intent(applicationContext, ProductDetailActivity::class.java)
+//                            intent.putExtra("orderId", mOrder!![position].id_order_products)
+//                            startActivity(intent)
+//                        }
+//                    })
+//                    adapter.notifyDataSetChanged()
+//                    orders_list.adapter = adapter
+////                    ProgressDialogUtils.sharedInstance.hideProgressDialog()
+//                }
+//            }
+//            else {
+////                ProgressDialogUtils.sharedInstance.hideProgressDialog()
+//            }
+//
+//        })
+//
+//        getOrdersAdapter.start()
 
         userSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?,
@@ -160,13 +160,13 @@ class ManageOrdersActivity: AppCompatActivity() {
                                 })
                                 adapter.notifyDataSetChanged()
                                 orders_list.adapter = adapter
-                                ProgressDialogUtils.sharedInstance.hideProgressDialog()
+//                                ProgressDialogUtils.sharedInstance.hideProgressDialog()
                             }
                         }
                         else {
-                            runOnUiThread {
-                                ProgressDialogUtils.sharedInstance.hideProgressDialog()
-                            }
+//                            runOnUiThread {
+//                                ProgressDialogUtils.sharedInstance.hideProgressDialog()
+//                            }
                         }
                     })
                     getUserOrderAdapter.start()
