@@ -45,7 +45,7 @@
     <button class="btn btn-primary form-control" ng-click="addToCart(productInfo, 1)">Add <strong>{{productInfo.name}}</strong> to cart</button>
   </div>
   <hr/>
-  <div class="recommendation">
+  <div class="recommendation" ng-if="showrec">
     <p class="lead">Check this also </p>
     <div class="card-columns">
       <div class="card text-center" ng-repeat="item in rec_items|limitTo:6" ng-click="moreInfo(item);" style="cursor:pointer;">

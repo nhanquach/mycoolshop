@@ -251,8 +251,9 @@ app.controller('ApiController', ['$scope', '$http', '$location', '$localStorage'
   /**
    * Cart section
    */
+  $scope.showrec = false;
   $scope.addToCart = function (product, quantity) {
-
+    $scope.showrec = true;
     if (isNaN(parseFloat(quantity)) || product == undefined || quantity == undefined) {
       $scope.showAlert("warning", "Oops, some thing went wrong.", 3000);
       return false;
